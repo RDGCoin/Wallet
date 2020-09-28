@@ -10,5 +10,7 @@ export class GlobalsService {
   userWallet: ethers.Wallet;
   userAddress: string;
 
-  constructor() { }
+  constructor() {
+    this.loaderProgress = '';
+   }
 }

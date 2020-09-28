@@ -14,6 +14,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { GlobalsService } from './globals.service';
 import { WalletService } from './services/wallet.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
 	declarations: [
@@ -25,7 +26,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 		SwapComponent,
 		CreateConfirmComponent,
 	],
-	imports: [BrowserModule, AppRoutingModule, NgxSpinnerModule, ToastrModule.forRoot(), FormsModule, ReactiveFormsModule],
+	imports: [
+		BrowserModule,
+		AppRoutingModule,
+		NgxSpinnerModule,
+		ToastrModule.forRoot(),
+		FormsModule,
+		ReactiveFormsModule,
+		BrowserAnimationsModule,
+	],
 	providers: [WalletService, GlobalsService],
 	bootstrap: [AppComponent],
 })

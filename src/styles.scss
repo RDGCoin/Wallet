@@ -31,4 +31,10 @@ $light: $gray-100;
 $dark: $gray-800;
 
 // import in the bootstrap SASS file
-@import '../node_modules/bootstrap/scss/bootstrap'
+@import '../node_modules/bootstrap/scss/bootstrap';
+@import '~ngx-toastr/toastr-bs4-alert';
+
+html, body {
+  background-color: #101a2d;
+  height: 100%;
+}
