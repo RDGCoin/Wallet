@@ -51,7 +51,7 @@ export class CreateComponent implements OnInit {
 		document.execCommand('copy');
 		document.body.removeChild(selBox);
 
-		this.toastrService.success('Success', 'Address copied to clipboard!', {
+		this.toastrService.success('Successo', 'Texto copiado!', {
 			progressBar: true,
 		});
 	}

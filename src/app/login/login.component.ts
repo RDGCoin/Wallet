@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
 			const password = this.form.controls.password.value;
 			const encryptWallet = this.walletService.getFromStorage();
 			if (!encryptWallet) {
-				const toastr = this.toastrService.error('Error', 'Wallet do not exists, create or restore one!', {
+				const toastr = this.toastrService.error('Erro', 'Carteira não existe!', {
 					progressBar: true,
 				});
 				if (toastr)
@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/dashboard']);
 		} catch (err) {
 			console.error(err);
-			const toastr = this.toastrService.error('Error', 'Error to log in!', {
+			const toastr = this.toastrService.error('Erro', 'Error ao Entrar!', {
 				progressBar: true,
 			});
 			if (toastr)

@@ -50,7 +50,7 @@ export class CreateConfirmComponent {
 			const localMneumonic = this.walletService.getLocalStorage(LocalStorageKeysEnum.mneumonic);
 
 			if (localMneumonic !== this.model.mneumonic) {
-				const toastr = this.toastrService.error('Error', 'Invalid Mneumonic!', {
+				const toastr = this.toastrService.error('Erro', 'Mneumonico Inválido!', {
 					progressBar: true,
 				});
 				if (toastr) {
@@ -64,7 +64,7 @@ export class CreateConfirmComponent {
 			const wallet = this.walletService.restore(this.model.mneumonic);
 			await this.walletService.store(wallet, this.model.password);
 
-			const toastr = this.toastrService.success('Success', 'Wallet created!', {
+			const toastr = this.toastrService.success('Successo', 'Carteira criada!', {
 				progressBar: true,
 			});
 
@@ -76,7 +76,7 @@ export class CreateConfirmComponent {
 				});
 			}
 		} catch (err) {
-			const toastr = this.toastrService.error('Error', 'Error to create wallet!', {
+			const toastr = this.toastrService.error('Erro', 'Erro ao criar a carteira!', {
 				progressBar: true,
 			});
 
