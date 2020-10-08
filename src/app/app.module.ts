@@ -15,6 +15,8 @@ import { GlobalsService } from './globals.service';
 import { WalletService } from './services/wallet.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { QRCodeModule } from 'angularx-qrcode';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
 	declarations: [
@@ -30,10 +32,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 		BrowserModule,
 		AppRoutingModule,
 		NgxSpinnerModule,
-		ToastrModule.forRoot(),
+		ToastrModule.forRoot({
+      timeOut: 1000,
+      progressBar: true,
+      closeButton: true
+    }),
 		FormsModule,
 		ReactiveFormsModule,
-		BrowserAnimationsModule,
+    BrowserAnimationsModule,
+    QRCodeModule,
+    NgbModule,
 	],
 	providers: [WalletService, GlobalsService],
 	bootstrap: [AppComponent],

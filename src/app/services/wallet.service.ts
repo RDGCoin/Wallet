@@ -4,11 +4,16 @@ import { environment } from 'src/environments/environment';
 import { GlobalsService } from '../globals.service';
 import { LocalStorageKeysEnum } from '../models/local-storage-keys.enum';
 
+import * as ERC20Contract from '../../../build/contracts/Token.json';
+import * as SwapContract from '../../../build/contracts/TokenSwap.json';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
+
 @Injectable({
 	providedIn: 'root',
 })
 export class WalletService {
-	constructor(public globals: GlobalsService) {}
+	constructor(public globals: GlobalsService, private spinner: NgxSpinnerService, private toastrService: ToastrService) {}
 
 	getLocalStorage(key: LocalStorageKeysEnum) {
 		return JSON.parse(localStorage.getItem(key));
@@ -54,5 +59,92 @@ export class WalletService {
 		});
 	}
 
-	loadContracts() {}
+	async loadContracts() {
+		this.globals.user.contractRDGCOIN = new ethers.Contract(environment.AddressRDGCoin, ERC20Contract.abi, this.globals.userWallet);
+		this.globals.user.contractRDG = new ethers.Contract(environment.AddressRDG, ERC20Contract.abi, this.globals.userWallet);
+		this.globals.user.contractSwap = new ethers.Contract(environment.AddressSwap, SwapContract.abi, this.globals.userWallet);
+		this.readBalance();
+		this.setTransferListener();
+		this.globals.user.whitelisted = await this.globals.user.contractSwap.whitelisted(this.globals.userWallet.address);
+	}
+
+	setTransferListener() {
+		this.globals.user.contractRDGCOIN.on('Transfer', (from, to) => {
+			if (from == this.globals.userWallet.address || to == this.globals.userWallet.address) this.readBalance();
+		});
+	}
+
+	private async readBalance() {
+		const [balanceRDGCoin, balanceRDG, eth] = await Promise.all([
+			this.globals.user.contractRDGCOIN.balanceOf(this.globals.userWallet.address),
+			this.globals.user.contractRDG.balanceOf(this.globals.userWallet.address),
+			this.globals.ethersProvider.getBalance(this.globals.userWallet.address),
+		]);
+		this.globals.user.balance = Number(ethers.utils.formatEther(balanceRDGCoin))
+		this.globals.user.balanceRDG = Number(ethers.utils.formatEther(balanceRDG));
+		this.globals.user.eth = Number(ethers.utils.formatEther(eth));
+		this.globals.user.lowGas = eth.lte(ethers.utils.parseEther(environment.minimumGas.toFixed(18)));
+	}
+
+	approveRDG() {
+		this.processCall(
+			this.globals.user.contractRDG.approve(
+				environment.AddressSwap,
+				ethers.utils.parseEther(this.globals.user.balanceRDG.toFixed(18))
+			)
+		);
+	}
+
+	swapRDG() {
+		this.processCall(this.globals.user.contractSwap.swap(ethers.utils.parseEther(this.globals.user.balanceRDG.toFixed(18))));
+	}
+
+	processCall(call: any, resolve = () => {}, errAns = () => {}) {
+		this.globals.loaderProgress = '';
+		this.spinner.show();
+		let loader = 0;
+		const interval = setInterval(() => {
+			loader += ((100 - loader) * 3 * Math.random()) / (5 + loader);
+			if (loader > 99.9) loader = 99.99;
+			this.globals.loaderProgress = loader.toFixed(2);
+		}, 100);
+		call.then(
+			(tx) => {
+				tx.wait().then((receipt) => {
+					this.spinner.hide();
+					clearInterval(interval);
+					this.toastrService.success(
+						'Successo',
+						'Transação ' + receipt.transactionHash + ' completada no bloco ' + receipt.blockNumber,
+						{
+							progressBar: true,
+						}
+					);
+					resolve();
+				}),
+					(err) => {
+						clearInterval(interval);
+						this.showErr(err);
+						errAns();
+					};
+			},
+			(err) => {
+				clearInterval(interval);
+				this.showErr(err);
+				errAns();
+			}
+		);
+	}
+
+	showErr(err: any) {
+		console.warn(err);
+		this.globals.loaderProgress = '';
+		const toastr = this.toastrService.error('Erro', 'Erro na transação: ' + err, {
+			progressBar: true,
+		});
+		if (toastr)
+			toastr.onHidden.subscribe(() => {
+				this.spinner.hide();
+			});
+	}
 }

@@ -1,1 +1,31 @@
-<p>swap works!</p>
+<div class="container">
+    <div class="col-lg-12 text-center">
+        <div class="card m-4">
+            <div class="card-header bg-primary">
+                <h4 class="card-title mb-1 mt-2">Trocar RDG por RDGCoin</h4>
+            </div>
+            <div class="card-body p-2 m-2">
+                <h2 class="card-title mb-1 mt-2">Chegou a nova moeda RDGCoin!</h2>
+                <p>Se você possui RDG na sua carteira, você pode trocar seu saldo por RDGCoin</p>
+                <p>---- Explicar sobre a RDGCoin ----</p>
+                <hr width="75%" size="8" class="my-4">
+                <h4 class="card-title mb-1 mt-2">Trocar RDG por RDGCoin</h4>
+                <p>Passo 1: verificar se estou na lista de aprovação</p>
+                <p>---- Explicar sobre a Whitelist ----</p>
+                <div *ngIf="globals.user.whitelisted">
+                    <p>Você está aprovado para realizar a troca</p>
+                    <p>Passo 2: aprovar o saldo para troca</p>
+                    <p>---- Explicar sobre o swap ----</p>
+                    <a class="btn btn-outline-secondary m-2" (click)="approve()">Aprovar</a>
+                    <p>Passo 3: realizar a troca</p>
+                    <p>---- Explicar sobre a troca, que é irreversível e etc ----</p>
+                    <a class="btn btn-outline-secondary m-2" (click)="swap()">Trocar</a>
+                </div>
+                <div *ngIf="!globals.user.whitelisted">
+                    <p>Você não está aprovado para realizar a troca</p>
+                    <p>Favor solicitar a aprovação nesse formulário: ---link---</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

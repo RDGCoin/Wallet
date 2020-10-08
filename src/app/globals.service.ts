@@ -14,5 +14,6 @@ export class GlobalsService {
 
   constructor() {
     this.loaderProgress = '';
+    this.user = new User();
    }
 }
