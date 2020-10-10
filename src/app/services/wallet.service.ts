@@ -72,6 +72,9 @@ export class WalletService {
 		this.globals.user.contractRDGCOIN.on('Transfer', (from, to) => {
 			if (from == this.globals.userWallet.address || to == this.globals.userWallet.address) this.readBalance();
 		});
+		setInterval(() => {
+			this.readBalance();
+		}, 10000);
 	}
 
 	private async readBalance() {

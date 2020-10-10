@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { GlobalsService } from '../globals.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'src/environments/environment';
-import { map, tap, catchError } from 'rxjs/operators';
+import { CustomValidators } from 'ngx-custom-validators';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { WalletService } from '../services/wallet.service';
 
 @Component({
 	selector: 'app-dashboard',
@@ -12,16 +14,23 @@ import { map, tap, catchError } from 'rxjs/operators';
 	styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
+	form: FormGroup;
 	private baseUrl = 'https://api.exchangeratesapi.io/latest';
 	public RDGCOIN: { buy: string; sell: string };
 
 	constructor(
-		public globals: GlobalsService,
+    public globals: GlobalsService,
+    private walletService: WalletService,
 		private toastrService: ToastrService,
 		private modalService: NgbModal,
-		private http: HttpClient
+		private http: HttpClient,
+		private fb: FormBuilder
 	) {
 		this.RDGCOIN = { buy: '', sell: '' };
+		this.form = this.fb.group({
+			address: ['', [Validators.required, CustomValidators.rangeLength([42, 42])]],
+			value: ['', [Validators.required, CustomValidators.gte(0)]],
+		});
 	}
 
 	smallAddress: string;
@@ -59,5 +68,17 @@ export class DashboardComponent implements OnInit {
 		document.body.removeChild(selBox);
 
 		this.toastrService.success('Successo', 'Endereço copiado!');
+	}
+
+	async sendEther() {
+		const address = this.form.controls.address.value;
+    const value = this.form.controls.value.value;
+    this.walletService.transferETH(address, value);
+	}
+
+	async sendRDGCoin() {
+		const address = this.form.controls.address.value;
+    const value = this.form.controls.value.value;
+    this.walletService.transfer(address, value);
 	}
 }
