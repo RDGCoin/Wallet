@@ -80,10 +80,23 @@ export class WalletService {
 			this.globals.user.contractRDG.balanceOf(this.globals.userWallet.address),
 			this.globals.ethersProvider.getBalance(this.globals.userWallet.address),
 		]);
-		this.globals.user.balance = Number(ethers.utils.formatEther(balanceRDGCoin))
-		this.globals.user.balanceRDG = Number(ethers.utils.formatEther(balanceRDG));
+		this.globals.user.balance = Number(ethers.utils.formatEther(balanceRDGCoin));
+		this.globals.user.balanceRDG = Number(ethers.utils.formatUnits(balanceRDG, 8));
 		this.globals.user.eth = Number(ethers.utils.formatEther(eth));
 		this.globals.user.lowGas = eth.lte(ethers.utils.parseEther(environment.minimumGas.toFixed(18)));
+	}
+
+	transfer(address: string, value: number) {
+		this.processCall(this.globals.user.contractRDGCOIN.transfer(address, ethers.utils.parseEther(value.toFixed(18))));
+	}
+
+	transferETH(address: string, value: number) {
+		this.processCall(
+			this.globals.userWallet.sendTransaction({
+				to: address,
+				value: ethers.utils.parseEther(value.toFixed(18)),
+			})
+		);
 	}
 
 	approveRDG() {
