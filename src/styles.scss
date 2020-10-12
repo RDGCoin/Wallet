@@ -1,0 +1,41 @@
+$blue: #313F80;
+$indigo: #6610f2;
+$purple: #4A3080;
+$pink: #BB507F;
+$red: #dc3545;
+$orange: #BCAA38;
+$yellow: #ddb85f;
+$green: #79AC33;
+$teal: #9ACA57;
+$cyan: #17a2b8;
+
+$white:    #fff;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+$black:    #000;
+
+$primary: $yellow;
+$secondary: #101a2d;
+$success: $blue;
+$info: $cyan;
+$warning: $purple;
+$danger: $red;
+$light: $gray-100;
+$dark: $gray-800;
+
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
+@import '~ngx-toastr/toastr-bs4-alert';
+
+html, body {
+  background-color: #101a2d;
+  height: 100%;
+}

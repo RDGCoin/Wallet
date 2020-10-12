@@ -1,0 +1,32 @@
+<div class="container">
+    <div style="background-image:url('../../../assets/img/fundo_rdgcoin.jpg');height:100%;background-position:center;background-repeat:no-repeat;background-size:cover;">
+        <div class="d-flex justify-content-center text-center">
+            <div class="card m-4">
+                <div class="card-header">
+                    <h4 class="card-title mb-1 mt-2">Entrar</h4>
+                </div>
+                <div class="card-body p-2 m-2">
+                    <form [formGroup]="form" (ngSubmit)="signin()">
+                        <div class="form-group mb-4 mt-2">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                                </div>
+                                <input id="password" name="password" class="form-control " type="password" formControlName="password" [ngClass]="{ 'is-invalid': form.controls.password.invalid && form.controls.password.dirty, 'is-valid': form.controls.password.valid }">
+                            </div>
+                            <div class="text-danger text-center text-bold" *ngIf="form.controls.password.invalid && form.controls.password.dirty">
+                                <p *ngIf="form.controls.password.errors.required">Senha obrigatória</p>
+                                <p *ngIf="form.controls.password.errors.rangeLength">A senha precisa ter de 6 a 32 caracteres</p>
+                            </div>
+                        </div>
+                        <div class="form-group mb-4 mt-4">
+                            <button type="submit" class="btn btn-primary btn-block" [disabled]="form.invalid"> Entrar </button>
+                        </div>
+                    </form>
+                    <a class="float-left btn btn-outline-secondary m-2" routerLink="/create">Criar carteira</a>
+                    <a class="float-right btn btn-outline-secondary m-2" routerLink="/recover">Recuperar carteira</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
