@@ -40,6 +40,15 @@
                         <a class="btn btn-outline-secondary m-2" routerLink="/swap">Trocar RDG por RDGCoin</a>
                     </div>
                 </div>
+                <div class="card mt-2" *ngIf="globals.user.hasAdmin">
+                    <div class="card-header bg-success p-1">
+                        <b class="text-white my-2">Administrador</b>
+                    </div>
+                    <div class="card-body">
+                        <b>Você é administrador da RDGcoin</b>
+                        <button class="btn btn-outline-secondary m-2" (click)="open(AdminModal)">Aprovar swap<span><i class="fa fa-check mx-2 text-primary" style="font-size: medium;"></i></span></button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -89,7 +98,7 @@
                         </div>
                     </div>
                     <div class="form-group mb-4 mt-4">
-                        <button type="submit" class="btn btn-primary btn-block" [disabled]="form.invalid"> Entrar </button>
+                        <button type="submit" class="btn btn-primary btn-block" [disabled]="form.invalid"> Enviar </button>
                     </div>
                 </form>
             </div>
@@ -127,7 +136,7 @@
                         </div>
                     </div>
                     <div class="form-group mb-4 mt-4">
-                        <button type="submit" class="btn btn-primary btn-block" [disabled]="form.invalid"> Entrar </button>
+                        <button type="submit" class="btn btn-primary btn-block" [disabled]="form.invalid"> Enviar </button>
                     </div>
                 </form>
             </div>
@@ -144,6 +153,41 @@
         <div class="btns d-flex justify-content-center">
             <div class="card p-2 m-2 text-center">
                 <b>Em breve</b>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #AdminModal let-modal>
+    <div class="modal-header bg-primary">
+        <h4 class="modal-title" id="myModalLabel">Administrar RDGCoin</h4>
+        <button type="button" class="close" (click)="modal.close('')"> <span >×</span></button>
+    </div>
+    <div class="modal-body">
+        <div class="btns d-flex justify-content-center">
+            <div class="card p-2 m-2 text-center">
+                <b>Adicionar endereços na lista de permissão para swap</b>
+                <ul class="list-group mt-2">
+                  <li *ngFor="let item of addresses; index as i" class="list-group-item d-flex justify-content-between align-items-center">
+                    {{item}}<span class="btn btn-danger btn-small mx-1" (click)="addresses.splice(i)"><i class="fa fa-trash mx-2 text-white" style="font-size: medium;"></i></span>
+                  </li>
+                </ul>
+                <form [formGroup]="formWhitelist">
+                  <div class="form-group mb-4 mt-2">
+                      <b for="address">Endereço</b><br>
+                      <div class="input-group">
+                          <input #addressAddWhitelist id="address" name="address" class="form-control " type="address" formControlName="address" [ngClass]="{ 'is-invalid': formWhitelist.controls.address.invalid && formWhitelist.controls.address.dirty, 'is-valid': formWhitelist.controls.address.valid }">
+                      </div>
+                      <div class="text-danger text-center text-bold" *ngIf="formWhitelist.controls.address.invalid && formWhitelist.controls.address.dirty">
+                          <p *ngIf="formWhitelist.controls.address.errors.required">Endereço obrigatório</p>
+                          <p *ngIf="formWhitelist.controls.address.errors.rangeLength">O endereço precisa ter 42 caracteres</p>
+                      </div>
+                      <button class="btn btn-primary btn-block mt-2" [disabled]="formWhitelist.invalid" (click)="addresses.push(addressAddWhitelist.value)"> Adicionar </button>
+                  </div>
+                  <div class="form-group mb-4 mt-4">
+                      <button class="btn btn-primary btn-block mt-2" [disabled]="addresses.length <= 0" (click)="sendWhitelist()"> Enviar </button>
+                  </div>
+              </form>
             </div>
         </div>
     </div>

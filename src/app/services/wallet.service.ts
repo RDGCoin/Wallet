@@ -78,15 +78,18 @@ export class WalletService {
 	}
 
 	private async readBalance() {
-		const [balanceRDGCoin, balanceRDG, eth] = await Promise.all([
+    const adminRole = "0x0000000000000000000000000000000000000000000000000000000000000000"
+		const [balanceRDGCoin, balanceRDG, eth, admin] = await Promise.all([
 			this.globals.user.contractRDGCOIN.balanceOf(this.globals.userWallet.address),
 			this.globals.user.contractRDG.balanceOf(this.globals.userWallet.address),
-			this.globals.ethersProvider.getBalance(this.globals.userWallet.address),
+      this.globals.ethersProvider.getBalance(this.globals.userWallet.address),
+      this.globals.user.contractSwap.hasRole(adminRole, this.globals.userWallet.address)
 		]);
 		this.globals.user.balance = Number(ethers.utils.formatEther(balanceRDGCoin));
 		this.globals.user.balanceRDG = Number(ethers.utils.formatUnits(balanceRDG, 8));
 		this.globals.user.eth = Number(ethers.utils.formatEther(eth));
-		this.globals.user.lowGas = eth.lte(ethers.utils.parseEther(environment.minimumGas.toFixed(18)));
+    this.globals.user.lowGas = eth.lte(ethers.utils.parseEther(environment.minimumGas.toFixed(18)));
+    this.globals.user.hasAdmin = admin;
 	}
 
 	transfer(address: string, value: number) {
@@ -114,6 +117,10 @@ export class WalletService {
 	swapRDG() {
 		this.processCall(this.globals.user.contractSwap.swap(ethers.utils.parseUnits(this.globals.user.balanceRDG.toFixed(8), 8)));
 	}
+
+  async sendWhitelist(addresses: string[]) {
+    this.processCall(this.globals.user.contractSwap.whitelistAdd(addresses));
+  }
 
 	processCall(call: any, resolve = () => {}, errAns = () => {}) {
 		this.globals.loaderProgress = '';

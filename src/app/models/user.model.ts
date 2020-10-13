@@ -11,4 +11,5 @@ export class User {
   whitelisted: boolean;
   eth: number;
   lowGas: boolean;
+  hasAdmin: boolean;
 }

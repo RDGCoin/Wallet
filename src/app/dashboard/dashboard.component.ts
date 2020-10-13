@@ -17,20 +17,24 @@ export class DashboardComponent implements OnInit {
 	form: FormGroup;
 	private baseUrl = 'https://api.exchangeratesapi.io/latest';
 	public RDGCOIN: { buy: string; sell: string };
+	formWhitelist: FormGroup;
+	addresses: string[];
 
 	constructor(
-    public globals: GlobalsService,
-    private walletService: WalletService,
+		public globals: GlobalsService,
+		private walletService: WalletService,
 		private toastrService: ToastrService,
 		private modalService: NgbModal,
 		private http: HttpClient,
 		private fb: FormBuilder
 	) {
 		this.RDGCOIN = { buy: '', sell: '' };
+		this.addresses = [];
 		this.form = this.fb.group({
 			address: ['', [Validators.required, CustomValidators.rangeLength([42, 42])]],
 			value: ['', [Validators.required, CustomValidators.gte(0)]],
 		});
+		this.formWhitelist = this.fb.group({ address: ['', [Validators.required, CustomValidators.rangeLength([42, 42])]] });
 	}
 
 	smallAddress: string;
@@ -72,13 +76,17 @@ export class DashboardComponent implements OnInit {
 
 	async sendEther() {
 		const address = this.form.controls.address.value;
-    const value = this.form.controls.value.value;
-    this.walletService.transferETH(address, value);
+		const value = this.form.controls.value.value;
+		this.walletService.transferETH(address, value);
 	}
 
 	async sendRDGCoin() {
 		const address = this.form.controls.address.value;
-    const value = this.form.controls.value.value;
-    this.walletService.transfer(address, value);
-	}
+		const value = this.form.controls.value.value;
+		this.walletService.transfer(address, value);
+  }
+
+  async sendWhitelist() {
+    this.walletService.sendWhitelist(this.addresses);
+  }
 }
