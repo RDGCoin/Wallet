@@ -112,7 +112,7 @@ export class WalletService {
 	}
 
 	swapRDG() {
-		this.processCall(this.globals.user.contractSwap.swap(ethers.utils.parseEther(this.globals.user.balanceRDG.toFixed(18))));
+		this.processCall(this.globals.user.contractSwap.swap(ethers.utils.parseUnits(this.globals.user.balanceRDG.toFixed(8), 8)));
 	}
 
 	processCall(call: any, resolve = () => {}, errAns = () => {}) {
