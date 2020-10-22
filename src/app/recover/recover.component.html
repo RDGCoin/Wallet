@@ -14,11 +14,11 @@
 					<div class="form-areas">
 						<div class="form-top">
 							<h2>Recuperar carteira</h2>
-							<p>Preencha os campos abaixo para recuperar sua carteira</p>
+							<p>Preencha os dados abaixo para recuperar sua carteira</p>
 						</div>
                         <form (ngSubmit)="restore()" [formGroup]="form">
                             <div class="form-group">
-                                <label for="meneumonic">Mneumonico</label>
+                                <label for="meneumonic">Palavras de segurança</label>
                                 <textarea class="form-control" id="mneumonic" name="mneumonic" rows="3" 
                                     formControlName="mneumonic" 
                                     [ngClass]="{ 'is-invalid': form.controls.mneumonic.invalid && form.controls.mneumonic.dirty, 'is-valid': form.controls.mneumonic.valid }"></textarea>

@@ -13,12 +13,12 @@
 				<div class="form-right height-section d-flex justify-content-center align-items-center text-center">
 					<div class="form-areas">
 						<div class="form-top">
-							<h2>Confirmar</h2>
-							<p>Confirme os dados para criar sua carteira.</p>
+							<h2>Confirmar criação</h2>
+							<p>Preencha os dados abaixo para criar sua carteira</p>
 						</div>
                         <form (ngSubmit)="confirm()" [formGroup]="form">
                             <div class="form-group">
-                                <label for="meneumonic">Mneumonico</label>
+                                <label for="meneumonic">Palavras de segurança</label>
                                 <textarea class="form-control" id="mneumonic" name="mneumonic" rows="3" 
                                     formControlName="mneumonic" 
                                     [ngClass]="{ 'is-invalid': form.controls.mneumonic.invalid && form.controls.mneumonic.dirty, 'is-valid': form.controls.mneumonic.valid }"></textarea>
