@@ -1,8 +1,124 @@
-.container {
+.no-margin {
+  margin: 0;
+  padding: 0;
+}
+
+.form-field-area {
+  background: #f5f4ff;
+  padding: 60px 0;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+
+  .height-section {
+    height: 100%;
+    min-height: 800px
+  }
+
+  .from-left {
+    background: #101a2d;
+    backdrop-filter: blur(20px);
+    position: relative
+  }
+
+  .form-right {
+    background: #fff;
+    padding: 50px 70px;
+
+    .form-top {
+      margin-bottom: 35px;
+
+      h2 {
+        font-size: 26px;
+        line-height: 39px;
+        text-transform: capitalize;
+        color: #2f2f2f;
+        font-weight: 700
+      }
+
+      p {
+        font-weight: 400;
+        font-size: 15px;
+        line-height: 22px;
+        color: #666
+      }
+    }
+  }
+}
+
+.form-areas {
+  width: 100%;
+
+  form {
+    .form-group {
+      position: relative;
+
+      input {
+        width: 100%;
+        max-width: 100%;
+        height: 55px;
+        background: #fff;
+        border: 1px solid #e9e9e9;
+        box-sizing: border-box;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 22px;
+        color: #666;
+        font-style: italic;
+        transition: all .4s ease-in-out 0s;
+
+        &:focus {
+          border-color: #101a2d
+        }
+      }
+
+      .btn-primary, .btn-outline-primary {
+        width: 100%;
+        height: 55px;
+        background: #101a2d;
+        border-radius: 3px;
+        font-weight: 600;
+        font-size: 15px;
+        line-height: 40px;
+        text-align: center;
+        color: #fff;
+        border: 1px solid transparent;
+        -webkit-transition: all .5s;
+        -o-transition: all .5s;
+        -moz-transition: all .5s;
+        -ms-transition: all .5s;
+        transition: all .5s;
+
+        &:hover {
+          border: 1px solid #101a2d;
+          background: 0 0;
+          color: #101a2d
+        }
+      }
+      .btn-outline-primary {
+        border: 1px solid #ddb85f;
+        background: 0 0;
+        color: #ddb85f;
+      }
+    }
+
+    .no-account {
+      margin-bottom: 0;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 22px;
+      color: #666;
+      margin-top: 35px
+    }
+  }
+}
+
+.password-show {
   position: absolute;
+  right: 15px;
   top: 50%;
-  left: 50%;
-  -moz-transform: translateX(-50%) translateY(-50%);
-  -webkit-transform: translateX(-50%) translateY(-50%);
-  transform: translateX(-50%) translateY(-50%);
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #101a2d;
+  cursor: pointer
 }

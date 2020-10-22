@@ -1,39 +1,47 @@
-<div class="container">
-    <div style="background-image:url('../../../assets/img/fundo_rdgcoin.jpg');height:100%;background-position:center;background-repeat:no-repeat;background-size:cover;">
-        <div class="d-flex justify-content-center text-center">
-            <div class="card m-4">
-                <div class="card-header">
-                    <h4 class="card-title mb-1 mt-2">Criar carteira</h4>
-                </div>
-                <div class="card-body p-2 m-2">
-                    <form (ngSubmit)="confirmation()" [formGroup]="form">
-                        <div class="form-group">
-                            <label for="meneumonic">Mneumonico</label>
-                            <textarea class="form-control" id="mneumonic" name="mneumonic" rows="3" formControlName="mneumonic" readonly></textarea>
-                        </div>
-                        <div class="form-group">
-                            <div class="text-center">
-                                <div class="btn-group" role="group">
-                                    <a href="javascript:void(0)" (click)="downloadMneumonic()" class="btn btn-lg btn-outline-secondary">
-                                        <i class="fa fa-download"></i>
-                                    </a>
-                                    <a href="javascript:void(0)" class="btn btn-lg  btn-outline-secondary" (click)="copyToClipboard()">
-                                        <i class="fa fa-copy"></i>
-                                    </a>
+
+<div class="form-field-area">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6 no-margin">
+				<div class="from-left height-section d-flex justify-content-center align-items-center">
+					<div class="site-logo">
+						<img src="/assets/img/RDGCoin.png" class="img-fluid" alt="logo">
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 no-margin">
+				<div class="form-right height-section d-flex justify-content-center align-items-center text-center">
+					<div class="form-areas">
+						<div class="form-top">
+							<h2>Criar carteira</h2>
+							<p>Essa é a frase (Mneumonico) da sua carteira. Guarde em um local seguro. Sem ela, você não poderá recuperar mais sua carteira se precisar, e terá que criar outra.</p>
+						</div>
+                        <form (ngSubmit)="confirmation()" [formGroup]="form">
+                            <div class="form-group">
+                                <textarea class="form-control" id="mneumonic" name="mneumonic" rows="3" formControlName="mneumonic" readonly></textarea>
+                            </div>
+                            <div class="form-group">
+                                <div class="text-center">
+                                    <div class="btn-group btn-group-justify" role="group">
+                                        <a href="javascript:void(0)" class="btn btn-outline-secondary" (click)="downloadMneumonic()">
+                                            <i class="fa fa-download"></i> Download
+                                        </a>
+                                        <a href="javascript:void(0)" class="btn  btn-outline-secondary" (click)="copyToClipboard()">
+                                            <i class="fa fa-copy"></i> Copiar
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary btn-block"> Eu anotei meu mneumonico
-                          </button>
-                        </div>
-                        <div class="form-group">
-                            <button routerLink="" class="btn btn-outline-primary btn-block"> Voltar
-                          </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+                            <div class="form-group mt-5">
+                                <button type="submit" class="btn btn-primary">Eu anotei meu Mneumonico</button>
+                            </div>
+                            <div class="form-group">
+                                <button routerLink="" class="btn btn-outline-primary">Voltar</button>
+                            </div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
