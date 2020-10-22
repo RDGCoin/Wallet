@@ -16,13 +16,10 @@
 							<h2>Login</h2>
 							<p>Digite a senha para entrar na sua carteira</p>
 						</div>
-						<form [formGroup]="form" (ngSubmit)="signin()">
+						<form (ngSubmit)="signin()" [formGroup]="form">
 							<div class="form-group">
 								<div class="position-relative">
 									<input type="password" id="password" name="password" class="form-control look-pass-a" placeholder="SENHA" formControlName="password" [ngClass]="{ 'is-invalid': form.controls.password.invalid && form.controls.password.dirty, 'is-valid': form.controls.password.valid }">
-									<div class="eye password-show">
-										<i class="fa fa-eye-slash toggle-password"></i>
-									</div>
 								</div>
 							</div>
                             <div class="text-danger text-center text-bold" *ngIf="form.controls.password.invalid && form.controls.password.dirty">

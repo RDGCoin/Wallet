@@ -110,3 +110,43 @@
     }
   }
 }
+
+/* Portrait tablets and small desktops */
+@media (max-width: 991px) {
+  .form-field-area {
+      padding: 60px 0;
+      
+      .height-section {
+        height: 100%;
+        min-height: 250px;
+    }
+  }
+  .site-logo img {
+    max-height: 200px;
+  }
+}
+
+
+/* Landscape phones and portrait tablets */
+@media (max-width: 768px) {
+  .no-margin {
+    margin: 0;
+    padding: 0;
+  }
+  .form-field-area {
+    padding: 0;
+  }
+}
+
+/* Landscape phones and smaller */
+@media (max-width: 480px) {
+  .form-field-area .form-right .form-areas form .form-group {
+      position: relative;
+      padding-bottom: 20px;
+      padding-left: 20px;
+      padding-right: 20px;
+  }
+  .form-field-area .form-right.height-section {
+      padding: 50px 0px !important;
+  }
+}
