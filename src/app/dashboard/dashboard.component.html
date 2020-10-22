@@ -1,194 +1,184 @@
-<div class="container">
-    <div class="col-lg-12 text-center">
-        <div class="card mt-4">
-            <div class="card-header bg-primary p-2">
-                <p class="text-small my-2">{{smallAddress}}
-                    <button (click)="copyToClipboard()" class="btn btn-sm btn-outline-dark mx-2 py-0 px-1"><i class="fa fa-copy"></i></button>
-                    <button (click)="open(qrcodeModal)" class="btn btn-sm btn-outline-dark mx-2 py-0 px-1"><i class="fa fa-qrcode"></i></button>
-                    <button routerLink="" class="btn btn-sm btn-outline-dark mx-2 py-0 px-1"><i class="fa fa-sign-out"></i></button>
-                </p>
-            </div>
-            <div class="card-body p-2 m-2">
-                <div class="card mt-2">
-                    <div class="card-header bg-warning p-1">
-                        <b class="text-white my-2">Saldo Ethereum</b>
-                    </div>
-                    <div class="card-body">
-                        <b>{{globals.user.eth}} ETH <span *ngIf="globals.user.lowGas"><i class="fa fa-warning mx-2 text-danger" style="font-size: x-large;"></i></span></b> <br>
-                        <button class="btn btn-outline-secondary m-2" (click)="open(qrcodeModal)">Receber<span><i class="fa fa-cloud-download mx-2 text-primary" style="font-size: medium;"></i></span></button>
-                        <button class="btn btn-outline-secondary m-2" (click)="open(sendEtherModal)">Enviar<span><i class="fa fa-send mx-2 text-primary" style="font-size: medium;"></i></span></button>
-                    </div>
-                </div>
-                <div class="card mt-2">
-                    <div class="card-header bg-success p-1">
-                        <b class="text-white my-2">Saldo RDGCoin</b>
-                    </div>
-                    <div class="card-body">
-                        <b>{{globals.user.balance}} RDGCOIN</b> <br>
-                        <b>Compra: {{RDGCOIN.buy}}</b><br>
-                        <b>Venda: {{RDGCOIN.sell}}</b><br>
-                        <button class="btn btn-outline-secondary m-2" (click)="open(SoonModal)">Comprar<span><i class="fa fa-money mx-2 text-primary" style="font-size: medium;"></i></span></button>
-                        <button class="btn btn-outline-secondary m-2" (click)="open(sendRDGCoinModal)">Enviar<span><i class="fa fa-send mx-2 text-primary" style="font-size: medium;"></i></span></button>
-                    </div>
-                </div>
-                <div class="card mt-2" *ngIf="globals.user.balanceRDG > 0">
-                    <div class="card-header bg-info p-1">
-                        <b class="text-white my-2">Saldo RDG</b>
-                    </div>
-                    <div class="card-body">
-                        <b>{{globals.user.balanceRDG}} RDG</b>
-                        <a class="btn btn-outline-secondary m-2" routerLink="/swap">Trocar RDG por RDGCoin</a>
-                    </div>
-                </div>
-                <div class="card mt-2" *ngIf="globals.user.hasAdmin">
-                    <div class="card-header bg-success p-1">
-                        <b class="text-white my-2">Administrador</b>
-                    </div>
-                    <div class="card-body">
-                        <b>Você é administrador da RDGcoin</b>
-                        <button class="btn btn-outline-secondary m-2" (click)="open(AdminModal)">Aprovar swap<span><i class="fa fa-check mx-2 text-primary" style="font-size: medium;"></i></span></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<ng-template #qrcodeModal let-modal>
-    <div class="modal-header bg-primary">
-        <h4 class="modal-title" id="myModalLabel">QR Code</h4>
-        <button type="button" class="close" (click)="modal.close('')"> <span >×</span></button>
-    </div>
-    <div class="modal-body">
-        <div class="btns d-flex justify-content-center">
-            <div class="card p-2 m-2 text-center">
-                <qrcode [qrdata]="globals.userWallet.address" [width]="256" [errorCorrectionLevel]="'M'" *ngIf="globals.userWallet.address"></qrcode>
-                <p class="colortext psize">{{globals.userWallet.address}}</p>
-                <button (click)="copyToClipboard()" class="btn btn-outline-dark"><i class="fa fa-copy"></i></button>
-            </div>
-        </div>
-    </div>
-</ng-template>
-<ng-template #sendEtherModal let-modal>
-    <div class="modal-header bg-primary">
-        <h4 class="modal-title" id="myModalLabel">Enviar Ethereum</h4>
-        <button type="button" class="close" (click)="modal.close('')"> <span >×</span></button>
-    </div>
-    <div class="modal-body">
-        <div class="btns d-flex justify-content-center">
-            <div class="card p-2 m-2 text-center">
-                <form [formGroup]="form" (ngSubmit)="sendEther()">
-                    <div class="form-group mb-4 mt-2">
-                        <b for="address">Endereço</b><br>
-                        <div class="input-group">
-                            <input id="address" name="address" class="form-control " type="address" formControlName="address" [ngClass]="{ 'is-invalid': form.controls.address.invalid && form.controls.address.dirty, 'is-valid': form.controls.address.valid }">
-                        </div>
-                        <div class="text-danger text-center text-bold" *ngIf="form.controls.address.invalid && form.controls.address.dirty">
-                            <p *ngIf="form.controls.address.errors.required">Endereço obrigatório</p>
-                            <p *ngIf="form.controls.address.errors.rangeLength">O endereço precisa ter 42 caracteres</p>
-                        </div>
-                    </div>
-                    <div class="form-group mb-4 mt-2">
-                        <b for="value">Valor</b><br>
-                        <div class="input-group">
-                            <input id="value" name="value" class="form-control " type="number" formControlName="value" [ngClass]="{ 'is-invalid': form.controls.value.invalid && form.controls.value.dirty, 'is-valid': form.controls.value.valid }">
-                        </div>
-                        <div class="text-danger text-center text-bold" *ngIf="form.controls.value.invalid && form.controls.value.dirty">
-                            <p *ngIf="form.controls.value.errors.required">Valor obrigatório</p>
-                            <p *ngIf="form.controls.value.errors.gte">O valor precisa ser maior que zero</p>
-                        </div>
-                    </div>
-                    <div class="form-group mb-4 mt-4">
-                        <button type="submit" class="btn btn-primary btn-block" [disabled]="form.invalid"> Enviar </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</ng-template>
+<div id="page-container">
 
-<ng-template #sendRDGCoinModal let-modal>
-    <div class="modal-header bg-primary">
-        <h4 class="modal-title" id="myModalLabel">Enviar RDGCoin</h4>
-        <button type="button" class="close" (click)="modal.close('')"> <span >×</span></button>
-    </div>
-    <div class="modal-body">
-        <div class="btns d-flex justify-content-center">
-            <div class="card p-2 m-2 text-center">
-                <form [formGroup]="form" (ngSubmit)="sendRDGCoin()">
-                    <div class="form-group mb-4 mt-2">
-                        <b for="address">Endereço</b><br>
-                        <div class="input-group">
-                            <input id="address" name="address" class="form-control " type="address" formControlName="address" [ngClass]="{ 'is-invalid': form.controls.address.invalid && form.controls.address.dirty, 'is-valid': form.controls.address.valid }">
-                        </div>
-                        <div class="text-danger text-center text-bold" *ngIf="form.controls.address.invalid && form.controls.address.dirty">
-                            <p *ngIf="form.controls.address.errors.required">Endereço obrigatório</p>
-                            <p *ngIf="form.controls.address.errors.rangeLength">O endereço precisa ter 42 caracteres</p>
-                        </div>
-                    </div>
-                    <div class="form-group mb-4 mt-2">
-                        <b for="value">Valor</b><br>
-                        <div class="input-group">
-                            <input id="value" name="value" class="form-control " type="number" formControlName="value" [ngClass]="{ 'is-invalid': form.controls.value.invalid && form.controls.value.dirty, 'is-valid': form.controls.value.valid }">
-                        </div>
-                        <div class="text-danger text-center text-bold" *ngIf="form.controls.value.invalid && form.controls.value.dirty">
-                            <p *ngIf="form.controls.value.errors.required">Valor obrigatório</p>
-                            <p *ngIf="form.controls.value.errors.gte">O valor precisa ser maior que zero</p>
-                        </div>
-                    </div>
-                    <div class="form-group mb-4 mt-4">
-                        <button type="submit" class="btn btn-primary btn-block" [disabled]="form.invalid"> Enviar </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</ng-template>
+	<header class="header-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3">
+					<div class="logo-area">
+						<img src="/assets/img/logo_rr.png" alt="Logo Rotas do Garimpo" />
+					</div>
+				</div>
+				<div class="col-lg-9">
+					<div class="balance-area">
+						<div class="single-balance available-balance">
+							<h4 class="balance-title">Cotação RDG</h4>
+							<h6 class="balance"><span>Compra</span> {{RDGCOIN.buy}}</h6>
+							<h6 class="balance"><span>Venda</span> {{RDGCOIN.sell}}</h6>
+							<div class="balance-icon">
+								<span class="icon-money"></span>
+							</div>
+						</div>
+						<div class="single-balance pending-balance">
+							<h4 class="balance-title">Saldo RDGCoin</h4>
+							<h6 class="balance">{{globals.user.balance}} <span>RDG</span></h6>
+							<h6 class="balance"><span>R$</span> 123,45</h6>
+							<div class="balance-icon">
+								<span class="icon-wallet"></span>
+							</div>
+						</div>
+						<div class="single-balance pending-balance">
+							<h4 class="balance-title">Saldo Ethereum</h4>
+							<h6 class="balance">{{globals.user.eth}} <span>ETH</span> <span *ngIf="globals.user.lowGas"><i class="fa fa-warning mx-2 text-danger"></i></span></h6>
+							<h6 class="balance"><span>R$</span> 123,45</h6>
+							<div class="balance-icon">
+								<span class="icon-wallet"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<section class="main-area">
+		<div class="container">
+			<div class="row same-height">
+				<div class="col-lg-4 col-md-12 col-sm-12 mb-4">
+					<div class="card">
+						<div class="card-body d-flex justify-content-center">
+							<div class="text-center">
+								<qrcode [qrdata]="globals.userWallet.address" [width]="256" [errorCorrectionLevel]="'M'" *ngIf="globals.userWallet.address"></qrcode>
+								<!--<p class="colortext psize">{{globals.userWallet.address}}</p>-->
+								<p class="colortext psize">{{smallAddress}}</p>
+								<button (click)="copyToClipboard()" class="btn btn-outline-dark"><i class="fa fa-copy"></i> Copiar endereço</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">Enviar RDG</h5>
+							<form [formGroup]="form" (ngSubmit)="sendRDGCoin()">
+								<div class="form-group">
+									<input type="text" id="address" name="address" class="form-control" placeholder="Endereço" formControlName="address" [ngClass]="{ 'is-invalid': form.controls.address.invalid && form.controls.address.dirty, 'is-valid': form.controls.address.valid }">
+									<div class="text-danger text-center text-bold" *ngIf="form.controls.address.invalid && form.controls.address.dirty">
+										<p *ngIf="form.controls.address.errors.required">Endereço obrigatório</p>
+										<p *ngIf="form.controls.address.errors.rangeLength">O endereço precisa ter 42 caracteres</p>
+									</div>
+								</div>
+								<div class="form-group">
+									<input type="number" id="value" name="value" class="form-control" placeholder="Valor" formControlName="value" [ngClass]="{ 'is-invalid': form.controls.value.invalid && form.controls.value.dirty, 'is-valid': form.controls.value.valid }">
+									<div class="text-danger text-center text-bold" *ngIf="form.controls.value.invalid && form.controls.value.dirty">
+										<p *ngIf="form.controls.value.errors.required">Valor obrigatório</p>
+										<p *ngIf="form.controls.value.errors.gte">O valor precisa ser maior que zero</p>
+									</div>
+								</div>
+								<div class="form-group">
+									<button type="submit" class="btn btn-primary btn-block" [disabled]="form.invalid">Enviar</button>
+								</div>
+							</form>
+
+							<!--
+							<button class="btn btn-outline-primary m-2" (click)="open(SoonModal)">Comprar RDG</button>
+							<a class="btn btn-outline-primary m-2" routerLink="/swap" *ngIf="globals.user.balanceRDG > 0">Trocar RDG por RDGCoin</a>
+							-->
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">Enviar ETH</h5>
+							<form [formGroup]="form" (ngSubmit)="sendEther()">
+								<div class="form-group">
+									<input type="text" id="address" name="address" class="form-control" placeholder="Endereço" formControlName="address" [ngClass]="{ 'is-invalid': form.controls.address.invalid && form.controls.address.dirty, 'is-valid': form.controls.address.valid }">
+									<div class="text-danger text-center text-bold" *ngIf="form.controls.address.invalid && form.controls.address.dirty">
+										<p *ngIf="form.controls.address.errors.required">Endereço obrigatório</p>
+										<p *ngIf="form.controls.address.errors.rangeLength">O endereço precisa ter 42 caracteres</p>
+									</div>
+								</div>
+								<div class="form-group">
+									<input type="number" id="value" name="value" class="form-control" placeholder="Valor" formControlName="value" [ngClass]="{ 'is-invalid': form.controls.value.invalid && form.controls.value.dirty, 'is-valid': form.controls.value.valid }">
+									<div class="text-danger text-center text-bold" *ngIf="form.controls.value.invalid && form.controls.value.dirty">
+										<p *ngIf="form.controls.value.errors.required">Valor obrigatório</p>
+										<p *ngIf="form.controls.value.errors.gte">O valor precisa ser maior que zero</p>
+									</div>
+								</div>
+								<div class="form-group">
+									<button type="submit" class="btn btn-primary btn-block" [disabled]="form.invalid">Enviar</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row" *ngIf="globals.user.hasAdmin">
+				<div class="col-md-12 mb-4">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">Administrador</h5>
+							<b>Você é administrador da RDGcoin</b>
+							<div class="btns d-flex justify-content-center">
+								<div class="card p-2 m-2 text-center">
+									<b>Adicionar endereços na lista de permissão para SWAP</b>
+									<ul class="list-group mt-2">
+										<li *ngFor="let item of addresses; index as i" class="list-group-item d-flex justify-content-between align-items-center">
+											{{item}} <span class="btn btn-danger btn-small mx-1" (click)="addresses.splice(i)"><i class="fa fa-trash mx-2 text-white"></i></span>
+										</li>
+									</ul>
+									<form [formGroup]="formWhitelist">
+										<div class="form-group">
+											<label for="address">Endereço</label>
+											<input #addressAddWhitelist id="address" name="address" class="form-control " type="address" formControlName="address" [ngClass]="{ 'is-invalid': formWhitelist.controls.address.invalid && formWhitelist.controls.address.dirty, 'is-valid': formWhitelist.controls.address.valid }">
+											<div class="text-danger text-center text-bold" *ngIf="formWhitelist.controls.address.invalid && formWhitelist.controls.address.dirty">
+												<p *ngIf="formWhitelist.controls.address.errors.required">Endereço obrigatório</p>
+												<p *ngIf="formWhitelist.controls.address.errors.rangeLength">O endereço precisa ter 42 caracteres</p>
+											</div>
+											<button class="btn btn-primary btn-block mt-2" [disabled]="formWhitelist.invalid" (click)="addresses.push(addressAddWhitelist.value)">Adicionar</button>
+										</div>
+										<div class="form-group mb-4 mt-4">
+											<button class="btn btn-primary btn-block mt-2" [disabled]="addresses.length <= 0" (click)="sendWhitelist()">Enviar</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<footer class="footer-area">
+		<div class="container">
+			<div class="row">
+				<div class="copyright-area col-md-6">
+					<p>© 2020 - Todos os direitos reservados.</p>
+				</div>
+				<div class="footer-menu col-md-6">
+					<ul>
+						<li><a href="https://www.rdgcoin.com/" target="_blank">Sobre</a></li>
+						<li><a href="https://www.rdgcoin.com/atualizar-moeda/" target="_blank">Atualizar Moeda</a></li>
+						<li><a href="https://www.rdgcoin.com/contato/" target="_blank">Contato</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</footer>
+</div>
 
 <ng-template #SoonModal let-modal>
-    <div class="modal-header bg-primary">
-        <h4 class="modal-title" id="myModalLabel">Comprar RDGCoin</h4>
-        <button type="button" class="close" (click)="modal.close('')"> <span >×</span></button>
-    </div>
-    <div class="modal-body">
-        <div class="btns d-flex justify-content-center">
-            <div class="card p-2 m-2 text-center">
-                <b>Em breve</b>
-            </div>
-        </div>
-    </div>
-</ng-template>
-
-<ng-template #AdminModal let-modal>
-    <div class="modal-header bg-primary">
-        <h4 class="modal-title" id="myModalLabel">Administrar RDGCoin</h4>
-        <button type="button" class="close" (click)="modal.close('')"> <span >×</span></button>
-    </div>
-    <div class="modal-body">
-        <div class="btns d-flex justify-content-center">
-            <div class="card p-2 m-2 text-center">
-                <b>Adicionar endereços na lista de permissão para swap</b>
-                <ul class="list-group mt-2">
-                  <li *ngFor="let item of addresses; index as i" class="list-group-item d-flex justify-content-between align-items-center">
-                    {{item}}<span class="btn btn-danger btn-small mx-1" (click)="addresses.splice(i)"><i class="fa fa-trash mx-2 text-white" style="font-size: medium;"></i></span>
-                  </li>
-                </ul>
-                <form [formGroup]="formWhitelist">
-                  <div class="form-group mb-4 mt-2">
-                      <b for="address">Endereço</b><br>
-                      <div class="input-group">
-                          <input #addressAddWhitelist id="address" name="address" class="form-control " type="address" formControlName="address" [ngClass]="{ 'is-invalid': formWhitelist.controls.address.invalid && formWhitelist.controls.address.dirty, 'is-valid': formWhitelist.controls.address.valid }">
-                      </div>
-                      <div class="text-danger text-center text-bold" *ngIf="formWhitelist.controls.address.invalid && formWhitelist.controls.address.dirty">
-                          <p *ngIf="formWhitelist.controls.address.errors.required">Endereço obrigatório</p>
-                          <p *ngIf="formWhitelist.controls.address.errors.rangeLength">O endereço precisa ter 42 caracteres</p>
-                      </div>
-                      <button class="btn btn-primary btn-block mt-2" [disabled]="formWhitelist.invalid" (click)="addresses.push(addressAddWhitelist.value)"> Adicionar </button>
-                  </div>
-                  <div class="form-group mb-4 mt-4">
-                      <button class="btn btn-primary btn-block mt-2" [disabled]="addresses.length <= 0" (click)="sendWhitelist()"> Enviar </button>
-                  </div>
-              </form>
-            </div>
-        </div>
-    </div>
+	<div class="modal-header bg-primary">
+		<h4 class="modal-title" id="myModalLabel">Comprar RDGCoin</h4>
+		<button type="button" class="close" (click)="modal.close('')"> <span >×</span></button>
+	</div>
+	<div class="modal-body">
+		<div class="btns d-flex justify-content-center">
+			<div class="card p-2 m-2 text-center">
+				<b>Em breve</b>
+			</div>
+		</div>
+	</div>
 </ng-template>
