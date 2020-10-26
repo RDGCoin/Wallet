@@ -12,8 +12,8 @@
 					<div class="balance-area">
 						<div class="single-balance available-balance">
 							<h4 class="balance-title">Cotação RDG</h4>
-							<h6 class="balance"><span>Compra</span> {{RDGCOIN.buy}}</h6>
-							<h6 class="balance"><span>Venda</span> {{RDGCOIN.sell}}</h6>
+							<h6 class="balance"><span>Compra</span> {{RDGCOIN.buy | currency:'R$ '}}</h6>
+							<h6 class="balance"><span>Venda</span> {{RDGCOIN.sell | currency:'R$ '}}</h6>
 							<div class="balance-icon">
 								<span class="icon-money"></span>
 							</div>
@@ -59,23 +59,39 @@
 					<div class="card">
 						<div class="card-body">
 							<h5 class="card-title">Enviar RDG</h5>
-							<form [formGroup]="form" (ngSubmit)="sendRDGCoin()">
+							<form [formGroup]="formRDG" (ngSubmit)="sendRDGCoin()">
 								<div class="form-group">
-									<input type="text" id="address" name="address" class="form-control" placeholder="Endereço" formControlName="address" [ngClass]="{ 'is-invalid': form.controls.address.invalid && form.controls.address.dirty, 'is-valid': form.controls.address.valid }">
-									<div class="text-danger text-center text-bold" *ngIf="form.controls.address.invalid && form.controls.address.dirty">
-										<p *ngIf="form.controls.address.errors.required">Endereço obrigatório</p>
-										<p *ngIf="form.controls.address.errors.rangeLength">O endereço precisa ter 42 caracteres</p>
+									<input type="text" id="address" name="address" class="form-control" placeholder="Endereço" formControlName="address" [ngClass]="{ 'is-invalid': formRDG.controls.address.invalid && formRDG.controls.address.dirty, 'is-valid': formRDG.controls.address.valid }" />
+									<div class="text-danger text-center text-bold" *ngIf="formRDG.controls.address.invalid && formRDG.controls.address.dirty">
+										<p *ngIf="formRDG.controls.address.errors.required">Endereço obrigatório</p>
+										<p *ngIf="formRDG.controls.address.errors.rangeLength">O endereço precisa ter 42 caracteres</p>
 									</div>
 								</div>
 								<div class="form-group">
-									<input type="number" id="value" name="value" class="form-control" placeholder="Valor" formControlName="value" [ngClass]="{ 'is-invalid': form.controls.value.invalid && form.controls.value.dirty, 'is-valid': form.controls.value.valid }">
-									<div class="text-danger text-center text-bold" *ngIf="form.controls.value.invalid && form.controls.value.dirty">
-										<p *ngIf="form.controls.value.errors.required">Valor obrigatório</p>
-										<p *ngIf="form.controls.value.errors.gte">O valor precisa ser maior que zero</p>
+									<div class="input-group">
+										<input type="number" id="value_rdg" name="value_rdg" class="form-control" placeholder="Valor em RDG" min="0" formControlName="value_rdg" [ngClass]="{ 'is-invalid': formRDG.controls.value_rdg.invalid && formRDG.controls.value_rdg.dirty, 'is-valid': formRDG.controls.value_rdg.valid }" (change)="convertRdgToReais()" />
+										<div class="input-group-prepend">
+											<span class="input-group-text">RDG</span>
+										</div>
+									</div>
+									<div class="text-danger text-center text-bold" *ngIf="formRDG.controls.value_rdg.invalid && formRDG.controls.value_rdg.dirty">
+										<p *ngIf="formRDG.controls.value_rdg.errors.required">Valor obrigatório</p>
+										<p *ngIf="formRDG.controls.value_rdg.errors.gte">O valor precisa ser maior que zero</p>
 									</div>
 								</div>
 								<div class="form-group">
-									<button type="submit" class="btn btn-primary btn-block" [disabled]="form.invalid">Enviar</button>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text">R$</span>
+										</div>
+										<input type="number" id="value_reais" name="value_reais" class="form-control" placeholder="Valor em reais" min="0" formControlName="value_reais" [ngClass]="{ 'is-invalid': formRDG.controls.value_reais.invalid && formRDG.controls.value_reais.dirty }" (change)="convertReaisToRdg()" />
+									</div>
+									<div class="text-danger text-center text-bold" *ngIf="formRDG.controls.value_reais.invalid && formRDG.controls.value_reais.dirty">
+										<p *ngIf="formRDG.controls.value_reais.errors.gte">O valor precisa ser maior que zero</p>
+									</div>
+								</div>
+								<div class="form-group">
+									<button type="submit" class="btn btn-primary btn-block" [disabled]="formRDG.invalid">Enviar</button>
 								</div>
 							</form>
 
@@ -90,23 +106,39 @@
 					<div class="card">
 						<div class="card-body">
 							<h5 class="card-title">Enviar ETH</h5>
-							<form [formGroup]="form" (ngSubmit)="sendEther()">
+							<form [formGroup]="formETH" (ngSubmit)="sendEther()">
 								<div class="form-group">
-									<input type="text" id="address" name="address" class="form-control" placeholder="Endereço" formControlName="address" [ngClass]="{ 'is-invalid': form.controls.address.invalid && form.controls.address.dirty, 'is-valid': form.controls.address.valid }">
-									<div class="text-danger text-center text-bold" *ngIf="form.controls.address.invalid && form.controls.address.dirty">
-										<p *ngIf="form.controls.address.errors.required">Endereço obrigatório</p>
-										<p *ngIf="form.controls.address.errors.rangeLength">O endereço precisa ter 42 caracteres</p>
+									<input type="text" id="address" name="address" class="form-control" placeholder="Endereço" formControlName="address" [ngClass]="{ 'is-invalid': formETH.controls.address.invalid && formETH.controls.address.dirty, 'is-valid': formETH.controls.address.valid }" />
+									<div class="text-danger text-center text-bold" *ngIf="formETH.controls.address.invalid && formETH.controls.address.dirty">
+										<p *ngIf="formETH.controls.address.errors.required">Endereço obrigatório</p>
+										<p *ngIf="formETH.controls.address.errors.rangeLength">O endereço precisa ter 42 caracteres</p>
 									</div>
 								</div>
 								<div class="form-group">
-									<input type="number" id="value" name="value" class="form-control" placeholder="Valor" formControlName="value" [ngClass]="{ 'is-invalid': form.controls.value.invalid && form.controls.value.dirty, 'is-valid': form.controls.value.valid }">
-									<div class="text-danger text-center text-bold" *ngIf="form.controls.value.invalid && form.controls.value.dirty">
-										<p *ngIf="form.controls.value.errors.required">Valor obrigatório</p>
-										<p *ngIf="form.controls.value.errors.gte">O valor precisa ser maior que zero</p>
+									<div class="input-group">
+										<input type="number" id="value_eth" name="value_eth" class="form-control" placeholder="Valor em ETH" min="0" formControlName="value_eth" [ngClass]="{ 'is-invalid': formETH.controls.value_eth.invalid && formETH.controls.value_eth.dirty, 'is-valid': formETH.controls.value_eth.valid }" (change)="convertEthToReais()" />
+										<div class="input-group-prepend">
+											<span class="input-group-text">ETH</span>
+										</div>
+									</div>
+									<div class="text-danger text-center text-bold" *ngIf="formETH.controls.value_eth.invalid && formETH.controls.value_eth.dirty">
+										<p *ngIf="formETH.controls.value_eth.errors.required">Valor obrigatório</p>
+										<p *ngIf="formETH.controls.value_eth.errors.gte">O valor precisa ser maior que zero</p>
 									</div>
 								</div>
 								<div class="form-group">
-									<button type="submit" class="btn btn-primary btn-block" [disabled]="form.invalid">Enviar</button>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text">R$</span>
+										</div>
+										<input type="number" id="value_reais" name="value_reais" class="form-control" placeholder="Valor em reais" min="0" formControlName="value_reais" [ngClass]="{ 'is-invalid': formETH.controls.value_reais.invalid && formETH.controls.value_reais.dirty }" (change)="convertReaisToEth()" />
+									</div>
+									<div class="text-danger text-center text-bold" *ngIf="formETH.controls.value_reais.invalid && formETH.controls.value_reais.dirty">
+										<p *ngIf="formETH.controls.value_reais.errors.gte">O valor precisa ser maior que zero</p>
+									</div>
+								</div>
+								<div class="form-group">
+									<button type="submit" class="btn btn-primary btn-block" [disabled]="formETH.invalid">Enviar</button>
 								</div>
 							</form>
 						</div>
@@ -131,7 +163,7 @@
 									<form [formGroup]="formWhitelist">
 										<div class="form-group">
 											<label for="address">Endereço</label>
-											<input #addressAddWhitelist id="address" name="address" class="form-control " type="address" formControlName="address" [ngClass]="{ 'is-invalid': formWhitelist.controls.address.invalid && formWhitelist.controls.address.dirty, 'is-valid': formWhitelist.controls.address.valid }">
+											<input #addressAddWhitelist id="address" name="address" class="form-control " type="address" formControlName="address" [ngClass]="{ 'is-invalid': formWhitelist.controls.address.invalid && formWhitelist.controls.address.dirty, 'is-valid': formWhitelist.controls.address.valid }" />
 											<div class="text-danger text-center text-bold" *ngIf="formWhitelist.controls.address.invalid && formWhitelist.controls.address.dirty">
 												<p *ngIf="formWhitelist.controls.address.errors.required">Endereço obrigatório</p>
 												<p *ngIf="formWhitelist.controls.address.errors.rangeLength">O endereço precisa ter 42 caracteres</p>
