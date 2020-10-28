@@ -11,9 +11,9 @@
 				<div class="col-lg-9">
 					<div class="balance-area">
 						<div class="single-balance available-balance">
-							<h4 class="balance-title">Cotação RDG</h4>
-							<h6 class="balance"><span>Compra</span> {{RDGCOIN.buy | currency:'R$ '}}</h6>
-							<h6 class="balance"><span>Venda</span> {{RDGCOIN.sell | currency:'R$ '}}</h6>
+							<h4 class="balance-title">Cotação Atual</h4>
+							<h6 class="balance"><span>RDG</span> {{RDGCOIN.buy | currency:'R$ '}}</h6>
+							<h6 class="balance"><span>ETH</span> {{ETH | currency:'R$ '}}</h6>
 							<div class="balance-icon">
 								<span class="icon-money"></span>
 							</div>
@@ -21,7 +21,7 @@
 						<div class="single-balance pending-balance">
 							<h4 class="balance-title">Saldo RDGCoin</h4>
 							<h6 class="balance">{{globals.user.balance}} <span>RDG</span></h6>
-							<h6 class="balance"><span>R$</span> 123,45</h6>
+							<h6 class="balance">{{globals.user.balance * RDGCOIN.buy | currency:'R$ '}}</h6>
 							<div class="balance-icon">
 								<span class="icon-wallet"></span>
 							</div>
@@ -29,7 +29,7 @@
 						<div class="single-balance pending-balance">
 							<h4 class="balance-title">Saldo Ethereum</h4>
 							<h6 class="balance">{{globals.user.eth}} <span>ETH</span> <span *ngIf="globals.user.lowGas"><i class="fa fa-warning mx-2 text-danger"></i></span></h6>
-							<h6 class="balance"><span>R$</span> 123,45</h6>
+							<h6 class="balance">{{globals.user.eth * ETH | currency:'R$ '}}</h6>
 							<div class="balance-icon">
 								<span class="icon-wallet"></span>
 							</div>
@@ -50,7 +50,10 @@
 								<qrcode [qrdata]="globals.userWallet.address" [width]="256" [errorCorrectionLevel]="'M'" *ngIf="globals.userWallet.address"></qrcode>
 								<!--<p class="colortext psize">{{globals.userWallet.address}}</p>-->
 								<p class="colortext psize">{{smallAddress}}</p>
-								<button (click)="copyToClipboard()" class="btn btn-outline-dark"><i class="fa fa-copy"></i> Copiar endereço</button>
+
+								<button class="btn btn-outline-dark" (click)="copyToClipboard()"><i class="fa fa-copy"></i> Copiar endereço</button>
+								<!--<button class="btn btn-outline-primary m-2" (click)="open(SoonModal)">Comprar RDG</button>-->
+								<button class="btn btn-outline-primary m-2" routerLink="/swap" *ngIf="globals.user.balanceRDG > 0">Atualizar moeda</button>
 							</div>
 						</div>
 					</div>
@@ -58,7 +61,7 @@
 				<div class="col-lg-4 col-md-6 col-sm-12 mb-4">
 					<div class="card">
 						<div class="card-body">
-							<h5 class="card-title">Enviar RDG</h5>
+							<h4 class="card-title">Enviar RDG</h4>
 							<form [formGroup]="formRDG" (ngSubmit)="sendRDGCoin()">
 								<div class="form-group">
 									<input type="text" id="address" name="address" class="form-control" placeholder="Endereço" formControlName="address" [ngClass]="{ 'is-invalid': formRDG.controls.address.invalid && formRDG.controls.address.dirty, 'is-valid': formRDG.controls.address.valid }" />
@@ -94,18 +97,13 @@
 									<button type="submit" class="btn btn-primary btn-block" [disabled]="formRDG.invalid">Enviar</button>
 								</div>
 							</form>
-
-							<!--
-							<button class="btn btn-outline-primary m-2" (click)="open(SoonModal)">Comprar RDG</button>
-							<a class="btn btn-outline-primary m-2" routerLink="/swap" *ngIf="globals.user.balanceRDG > 0">Trocar RDG por RDGCoin</a>
-							-->
 						</div>
 					</div>
 				</div>
 				<div class="col-lg-4 col-md-6 col-sm-12 mb-4">
 					<div class="card">
 						<div class="card-body">
-							<h5 class="card-title">Enviar ETH</h5>
+							<h4 class="card-title">Enviar ETH</h4>
 							<form [formGroup]="formETH" (ngSubmit)="sendEther()">
 								<div class="form-group">
 									<input type="text" id="address" name="address" class="form-control" placeholder="Endereço" formControlName="address" [ngClass]="{ 'is-invalid': formETH.controls.address.invalid && formETH.controls.address.dirty, 'is-valid': formETH.controls.address.valid }" />
@@ -150,7 +148,7 @@
 				<div class="col-md-12 mb-4">
 					<div class="card">
 						<div class="card-body">
-							<h5 class="card-title">Administrador</h5>
+							<h4 class="card-title">Administrador</h4>
 							<b>Você é administrador da RDGcoin</b>
 							<div class="btns d-flex justify-content-center">
 								<div class="card p-2 m-2 text-center">
@@ -180,6 +178,32 @@
 					</div>
 				</div>
 			</div>
+
+			<div class="row">
+				<div class="col-md-12 mb-4">
+					<div class="card">
+						<div class="card-body text-center">
+							<h4 class="card-title">Atualizar Moeda (Swap)</h4>
+
+							<h5 class="mb-1 mt-2">Chegou a nova moeda RDGCoin!</h5>
+							<p>Se você possui RDG na sua carteira, você pode trocar seu saldo por RDGCoin</p>
+							<p>---- Explicar sobre a RDGCoin ----</p>
+
+							<hr width="75%" size="8" class="my-4">
+							<h5 class="card-title mb-1 mt-2">Como faço para atualizar minha moeda?</h5>
+							<p>Passo 1: verificar se estou na lista de aprovação</p>
+							<p>---- Explicar sobre a Whitelist ----</p>
+							<p>Você está aprovado para realizar a troca</p>
+							<p>Passo 2: aprovar o saldo para troca</p>
+							<p>---- Explicar sobre o swap ----</p>
+							<a class="btn btn-outline-secondary m-2" (click)="approve()">Aprovar</a>
+							<p>Passo 3: realizar a troca</p>
+							<p>---- Explicar sobre a troca, que é irreversível e etc ----</p>
+							<a class="btn btn-outline-secondary m-2" (click)="swap()">Trocar</a>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</section>
 
@@ -187,13 +211,13 @@
 		<div class="container">
 			<div class="row">
 				<div class="copyright-area col-md-6">
-					<p>© 2020 - Todos os direitos reservados.</p>
+					<p>© Top Midia LTDA 2020 - Todos os direitos reservados.</p>
 				</div>
 				<div class="footer-menu col-md-6">
 					<ul>
 						<li><a href="https://www.rdgcoin.com/" target="_blank">Sobre</a></li>
-						<li><a href="https://www.rdgcoin.com/atualizar-moeda/" target="_blank">Atualizar Moeda</a></li>
-						<li><a href="https://www.rdgcoin.com/contato/" target="_blank">Contato</a></li>
+						<li><a routerLink="/swap" *ngIf="globals.user.balanceRDG > 0">Atualizar moeda</a></li>
+						<li><a href="mailto:contato@rdgcoin.com">Contato</a></li>
 					</ul>
 				</div>
 			</div>

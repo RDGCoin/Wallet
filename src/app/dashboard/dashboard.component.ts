@@ -17,8 +17,8 @@ export class DashboardComponent implements OnInit {
 	private exchangeRateApi = 'https://api.exchangeratesapi.io/latest';
 	private coinMarketCapApi = 'https://pro-api.coinmarketcap.com';
 	public RDGCOIN: { buy: number; sell: number };
-	public ETH: number;
-	public USD_BRL: number;
+	public ETH: number = 0;
+	public USD_BRL: number = 0;
 	formRDG: FormGroup;
 	formETH: FormGroup;
 	formWhitelist: FormGroup;
@@ -69,7 +69,8 @@ export class DashboardComponent implements OnInit {
 		this.http.get(`${this.coinMarketCapApi}/v1/cryptocurrency/quotes/latest?symbol=ETH`, {
 				observe: 'response',
 				headers: {
-					'X-CMC_PRO_API_KEY': '1107c837-515b-4721-9cf1-049124a29a7c'
+					'X-CMC_PRO_API_KEY': '1107c837-515b-4721-9cf1-049124a29a7c',
+					'Access-Control-Allow-Origin': '*'
 				}
 			})
 			.toPromise()
@@ -103,13 +104,13 @@ export class DashboardComponent implements OnInit {
 
 	convertReaisToRdg() {
 		const valorReais = parseFloat(this.formRDG.controls.value_reais.value);
-		const valorRdg = valorReais / this.RDGCOIN.sell;
+		const valorRdg = valorReais / this.RDGCOIN.buy;
 		this.formRDG.controls.value_rdg.setValue(valorRdg);
 	}
 
 	convertRdgToReais() {
 		const valorRdg = parseFloat(this.formRDG.controls.value_rdg.value);
-		const valorReais = (valorRdg * this.RDGCOIN.sell).toFixed(2);
+		const valorReais = (valorRdg * this.RDGCOIN.buy).toFixed(2);
 		this.formRDG.controls.value_reais.setValue(valorReais);
 	}
 
@@ -139,5 +140,13 @@ export class DashboardComponent implements OnInit {
 
   async sendWhitelist() {
     this.walletService.sendWhitelist(this.addresses);
+  }
+
+  approve(){
+    this.walletService.approveRDG();
+  }
+
+  swap() {
+    this.walletService.swapRDG();
   }
 }
