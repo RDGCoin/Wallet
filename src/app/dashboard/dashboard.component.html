@@ -52,8 +52,7 @@
 								<p class="colortext psize">{{smallAddress}}</p>
 
 								<button class="btn btn-outline-dark" (click)="copyToClipboard()"><i class="fa fa-copy"></i> Copiar endereço</button>
-								<!--<button class="btn btn-outline-primary m-2" (click)="open(SoonModal)">Comprar RDG</button>-->
-								<button class="btn btn-outline-primary m-2" routerLink="/swap" *ngIf="globals.user.balanceRDG > 0">Atualizar moeda</button>
+								<!--<button class="btn btn-outline-primary m-2" (click)="open(ComprarRDG)">Comprar RDG</button>-->
 							</div>
 						</div>
 					</div>
@@ -149,9 +148,9 @@
 					<div class="card">
 						<div class="card-body">
 							<h4 class="card-title">Administrador</h4>
-							<b>Você é administrador da RDGcoin</b>
-							<div class="btns d-flex justify-content-center">
-								<div class="card p-2 m-2 text-center">
+							<p class="text-center">Você é administrador da RDGcoin</p>
+							<div class="btns d-flex justify-content-center text-center">
+								<div>
 									<b>Adicionar endereços na lista de permissão para SWAP</b>
 									<ul class="list-group mt-2">
 										<li *ngFor="let item of addresses; index as i" class="list-group-item d-flex justify-content-between align-items-center">
@@ -160,16 +159,19 @@
 									</ul>
 									<form [formGroup]="formWhitelist">
 										<div class="form-group">
-											<label for="address">Endereço</label>
-											<input #addressAddWhitelist id="address" name="address" class="form-control " type="address" formControlName="address" [ngClass]="{ 'is-invalid': formWhitelist.controls.address.invalid && formWhitelist.controls.address.dirty, 'is-valid': formWhitelist.controls.address.valid }" />
+											<div class="input-group">
+												<input #addressAddWhitelist id="address" name="address" placeholder="Endereço" class="form-control" type="address" formControlName="address" [ngClass]="{ 'is-invalid': formWhitelist.controls.address.invalid && formWhitelist.controls.address.dirty, 'is-valid': formWhitelist.controls.address.valid }" />
+												<div class="input-group-btn">
+													<button class="btn btn-outline-primary" [disabled]="formWhitelist.invalid" (click)="addresses.push(addressAddWhitelist.value)">Adicionar</button>
+												</div>
+											</div>
 											<div class="text-danger text-center text-bold" *ngIf="formWhitelist.controls.address.invalid && formWhitelist.controls.address.dirty">
 												<p *ngIf="formWhitelist.controls.address.errors.required">Endereço obrigatório</p>
 												<p *ngIf="formWhitelist.controls.address.errors.rangeLength">O endereço precisa ter 42 caracteres</p>
 											</div>
-											<button class="btn btn-primary btn-block mt-2" [disabled]="formWhitelist.invalid" (click)="addresses.push(addressAddWhitelist.value)">Adicionar</button>
 										</div>
-										<div class="form-group mb-4 mt-4">
-											<button class="btn btn-primary btn-block mt-2" [disabled]="addresses.length <= 0" (click)="sendWhitelist()">Enviar</button>
+										<div class="form-group">
+											<button class="btn btn-primary btn-block" [disabled]="addresses.length <= 0" (click)="sendWhitelist()">Enviar</button>
 										</div>
 									</form>
 								</div>
@@ -178,28 +180,37 @@
 					</div>
 				</div>
 			</div>
-
-			<div class="row">
+			
+			<div class="row" *ngIf="globals.user.balanceRDG > 0">
 				<div class="col-md-12 mb-4">
 					<div class="card">
 						<div class="card-body text-center">
-							<h4 class="card-title">Atualizar Moeda (Swap)</h4>
 
-							<h5 class="mb-1 mt-2">Chegou a nova moeda RDGCoin!</h5>
-							<p>Se você possui RDG na sua carteira, você pode trocar seu saldo por RDGCoin</p>
-							<p>---- Explicar sobre a RDGCoin ----</p>
+							<h4 class="card-title">Chegou a nova moeda RDGCoin!</h4>
+							<p>Notamos que você possui saldo de <b>{{globals.user.balanceRDG}}</b> da moeda antiga RDG.</p>
 
-							<hr width="75%" size="8" class="my-4">
-							<h5 class="card-title mb-1 mt-2">Como faço para atualizar minha moeda?</h5>
-							<p>Passo 1: verificar se estou na lista de aprovação</p>
-							<p>---- Explicar sobre a Whitelist ----</p>
-							<p>Você está aprovado para realizar a troca</p>
-							<p>Passo 2: aprovar o saldo para troca</p>
-							<p>---- Explicar sobre o swap ----</p>
-							<a class="btn btn-outline-secondary m-2" (click)="approve()">Aprovar</a>
-							<p>Passo 3: realizar a troca</p>
-							<p>---- Explicar sobre a troca, que é irreversível e etc ----</p>
-							<a class="btn btn-outline-secondary m-2" (click)="swap()">Trocar</a>
+							<h5 class="card-title mb-2 mt-4">Porquê devo atualizar minhas moedas?</h5>
+							<p>Para saber mais informações sobre as novas características da moeda RDGCoin, <a href="https://www.rdgcoin.com/atualizar-moeda" target="_blank">clique aqui</a> para ter acesso ao vídeo explicativo, e ao relatório técnico das mudanças e melhorias do novo token.</p>
+							
+							<h5 class="card-title mb-2 mt-4">Como faço para atualizar minha moeda?</h5>
+							<h6 class="mb-2 mt-4">Passo 1: Verificar se estou na lista de aprovação</h6>
+							<p>Esse processo é chamado de "Whitelist", e é como uma lista de espera para as pessoas que desejam atualizar suas moedas para a nova RDGCoin.</p>
+
+							<div *ngIf="globals.user.whitelisted">
+								<h6 class="mb-2 mt-4">Passo 2: Aprovar o saldo para atualização</h6>
+								<p>O processo de atualização da moeda é muito simples, basta clicar no botão abaixo, que iremos aprovar a transferência dos seus tokens RDG para RDGCoin na Blockchain da Ethereum. Não se preocupe, todo o seu saldo em RDG será convertido em RDGCoin, sem nenhuma perda!</p>
+								<a class="btn btn-outline-secondary m-2" (click)="approve()">Aprovar atualização da minha moeda</a>
+
+								<h6 class="mb-2 mt-4">Passo 3: Realizar a troca</h6>
+								<p>Atenção, esse processo é irreversível. Após a troca ser efetivada, não será possível mais comprar ou enviar tokens RDG.<br/>
+									Isso não será um problema, pois a partir da troca, você podera enviar e receber os novos tokens RDGCoin.</p>
+								<a class="btn btn-outline-secondary m-2" (click)="swap()">Trocar RDG por RDGCoin</a>
+							</div>
+
+							<div *ngIf="!globals.user.whitelisted">
+								<p>Para poder atualizar o seu token, precisamos avaliar a solicitação de atualização de token caso a caso. Para fazer parte desta lista, clique no botão abaixo e preencha este formulário com seus dados.</p>
+								<a class="btn btn-outline-secondary m-2" href="#" target="_blank">Quero me cadastrar na Whitelist</a>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -211,12 +222,11 @@
 		<div class="container">
 			<div class="row">
 				<div class="copyright-area col-md-6">
-					<p>© Top Midia LTDA 2020 - Todos os direitos reservados.</p>
+					<p>© <b>Top Midia LTDA 2020</b> - Todos os direitos reservados.</p>
 				</div>
 				<div class="footer-menu col-md-6">
 					<ul>
 						<li><a href="https://www.rdgcoin.com/" target="_blank">Sobre</a></li>
-						<li><a routerLink="/swap" *ngIf="globals.user.balanceRDG > 0">Atualizar moeda</a></li>
 						<li><a href="mailto:contato@rdgcoin.com">Contato</a></li>
 					</ul>
 				</div>
@@ -225,9 +235,9 @@
 	</footer>
 </div>
 
-<ng-template #SoonModal let-modal>
+<ng-template #ComprarRDG let-modal>
 	<div class="modal-header bg-primary">
-		<h4 class="modal-title" id="myModalLabel">Comprar RDGCoin</h4>
+		<h4 class="modal-title">Comprar RDGCoin</h4>
 		<button type="button" class="close" (click)="modal.close('')"> <span >×</span></button>
 	</div>
 	<div class="modal-body">
