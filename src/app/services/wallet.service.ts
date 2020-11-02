@@ -78,15 +78,29 @@ export class WalletService {
 	}
 
 	private async readBalance() {
+<<<<<<< HEAD
 		const [balanceRDGCoin, balanceRDG, eth] = await Promise.all([
 			this.globals.user.contractRDGCOIN.balanceOf(this.globals.userWallet.address),
 			this.globals.user.contractRDG.balanceOf(this.globals.userWallet.address),
 			this.globals.ethersProvider.getBalance(this.globals.userWallet.address),
+=======
+    const adminRole = "0x0000000000000000000000000000000000000000000000000000000000000000"
+		const [balanceRDGCoin, balanceRDG, eth, admin] = await Promise.all([
+			this.globals.user.contractRDGCOIN.balanceOf(this.globals.userWallet.address),
+			this.globals.user.contractRDG.balanceOf(this.globals.userWallet.address),
+      this.globals.ethersProvider.getBalance(this.globals.userWallet.address),
+      this.globals.user.contractSwap.hasRole(adminRole, this.globals.userWallet.address)
+>>>>>>> 3354005d36dbecdda6fe7e25f787fd00d6d64a6b
 		]);
 		this.globals.user.balance = Number(ethers.utils.formatEther(balanceRDGCoin));
 		this.globals.user.balanceRDG = Number(ethers.utils.formatUnits(balanceRDG, 8));
 		this.globals.user.eth = Number(ethers.utils.formatEther(eth));
+<<<<<<< HEAD
 		this.globals.user.lowGas = eth.lte(ethers.utils.parseEther(environment.minimumGas.toFixed(18)));
+=======
+    this.globals.user.lowGas = eth.lte(ethers.utils.parseEther(environment.minimumGas.toFixed(18)));
+    this.globals.user.hasAdmin = admin;
+>>>>>>> 3354005d36dbecdda6fe7e25f787fd00d6d64a6b
 	}
 
 	transfer(address: string, value: number) {
@@ -115,6 +129,13 @@ export class WalletService {
 		this.processCall(this.globals.user.contractSwap.swap(ethers.utils.parseUnits(this.globals.user.balanceRDG.toFixed(8), 8)));
 	}
 
+<<<<<<< HEAD
+=======
+  async sendWhitelist(addresses: string[]) {
+    this.processCall(this.globals.user.contractSwap.whitelistAdd(addresses));
+  }
+
+>>>>>>> 3354005d36dbecdda6fe7e25f787fd00d6d64a6b
 	processCall(call: any, resolve = () => {}, errAns = () => {}) {
 		this.globals.loaderProgress = '';
 		this.spinner.show();

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="container">
     <div class="col-lg-12 text-center">
         <div class="card mt-4">
@@ -148,3 +149,255 @@
         </div>
     </div>
 </ng-template>
+=======
+<div id="page-container">
+
+	<header class="header-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3">
+					<div class="logo-area">
+						<img src="/assets/img/logo_rr.png" alt="Logo Rotas do Garimpo" />
+					</div>
+				</div>
+				<div class="col-lg-9">
+					<div class="balance-area">
+						<div class="single-balance available-balance">
+							<h4 class="balance-title">Cotação Atual</h4>
+							<h6 class="balance"><span>RDG</span> {{RDGCOIN.buy | currency:'R$ '}}</h6>
+							<h6 class="balance"><span>ETH</span> {{ETH | currency:'R$ '}}</h6>
+							<div class="balance-icon">
+								<span class="icon-money"></span>
+							</div>
+						</div>
+						<div class="single-balance pending-balance">
+							<h4 class="balance-title">Saldo RDGCoin</h4>
+							<h6 class="balance">{{globals.user.balance}} <span>RDG</span></h6>
+							<h6 class="balance">{{globals.user.balance * RDGCOIN.buy | currency:'R$ '}}</h6>
+							<div class="balance-icon">
+								<span class="icon-wallet"></span>
+							</div>
+						</div>
+						<div class="single-balance pending-balance">
+							<h4 class="balance-title">Saldo Ethereum</h4>
+							<h6 class="balance">{{globals.user.eth}} <span>ETH</span> <span *ngIf="globals.user.lowGas"><i class="fa fa-warning mx-2 text-danger"></i></span></h6>
+							<h6 class="balance">{{globals.user.eth * ETH | currency:'R$ '}}</h6>
+							<div class="balance-icon">
+								<span class="icon-wallet"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<section class="main-area">
+		<div class="container">
+			<div class="row same-height">
+				<div class="col-lg-4 col-md-12 col-sm-12 mb-4">
+					<div class="card">
+						<div class="card-body d-flex justify-content-center">
+							<div class="text-center">
+								<qrcode [qrdata]="globals.userWallet.address" [width]="256" [errorCorrectionLevel]="'M'" *ngIf="globals.userWallet.address"></qrcode>
+								<!--<p class="colortext psize">{{globals.userWallet.address}}</p>-->
+								<p class="colortext psize">{{smallAddress}}</p>
+
+								<button class="btn btn-outline-dark" (click)="copyToClipboard()"><i class="fa fa-copy"></i> Copiar endereço</button>
+								<!--<button class="btn btn-outline-primary m-2" (click)="open(ComprarRDG)">Comprar RDG</button>-->
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="card-title">Enviar RDGCoin</h4>
+							<form [formGroup]="formRDG" (ngSubmit)="sendRDGCoin()">
+								<div class="form-group">
+									<input type="text" id="address" name="address" class="form-control" placeholder="Endereço" formControlName="address" [ngClass]="{ 'is-invalid': formRDG.controls.address.invalid && formRDG.controls.address.dirty, 'is-valid': formRDG.controls.address.valid }" />
+									<div class="text-danger text-center text-bold" *ngIf="formRDG.controls.address.invalid && formRDG.controls.address.dirty">
+										<p *ngIf="formRDG.controls.address.errors.required">Endereço obrigatório</p>
+										<p *ngIf="formRDG.controls.address.errors.rangeLength">O endereço precisa ter 42 caracteres</p>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group">
+										<input type="number" id="value_rdg" name="value_rdg" class="form-control" placeholder="Valor em RDG" min="0" formControlName="value_rdg" [ngClass]="{ 'is-invalid': formRDG.controls.value_rdg.invalid && formRDG.controls.value_rdg.dirty, 'is-valid': formRDG.controls.value_rdg.valid }" (change)="convertRdgToReais()" />
+										<div class="input-group-prepend">
+											<span class="input-group-text">RDG</span>
+										</div>
+									</div>
+									<div class="text-danger text-center text-bold" *ngIf="formRDG.controls.value_rdg.invalid && formRDG.controls.value_rdg.dirty">
+										<p *ngIf="formRDG.controls.value_rdg.errors.required">Valor obrigatório</p>
+										<p *ngIf="formRDG.controls.value_rdg.errors.gte">O valor precisa ser maior que zero</p>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text">R$</span>
+										</div>
+										<input type="number" id="value_reais" name="value_reais" class="form-control" placeholder="Valor em reais" min="0" formControlName="value_reais" [ngClass]="{ 'is-invalid': formRDG.controls.value_reais.invalid && formRDG.controls.value_reais.dirty }" (change)="convertReaisToRdg()" />
+									</div>
+									<div class="text-danger text-center text-bold" *ngIf="formRDG.controls.value_reais.invalid && formRDG.controls.value_reais.dirty">
+										<p *ngIf="formRDG.controls.value_reais.errors.gte">O valor precisa ser maior que zero</p>
+									</div>
+								</div>
+								<div class="form-group">
+									<button type="submit" class="btn btn-primary btn-block" [disabled]="formRDG.invalid">Enviar</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="card-title">Enviar ETH</h4>
+							<form [formGroup]="formETH" (ngSubmit)="sendEther()">
+								<div class="form-group">
+									<input type="text" id="address" name="address" class="form-control" placeholder="Endereço" formControlName="address" [ngClass]="{ 'is-invalid': formETH.controls.address.invalid && formETH.controls.address.dirty, 'is-valid': formETH.controls.address.valid }" />
+									<div class="text-danger text-center text-bold" *ngIf="formETH.controls.address.invalid && formETH.controls.address.dirty">
+										<p *ngIf="formETH.controls.address.errors.required">Endereço obrigatório</p>
+										<p *ngIf="formETH.controls.address.errors.rangeLength">O endereço precisa ter 42 caracteres</p>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group">
+										<input type="number" id="value_eth" name="value_eth" class="form-control" placeholder="Valor em ETH" min="0" formControlName="value_eth" [ngClass]="{ 'is-invalid': formETH.controls.value_eth.invalid && formETH.controls.value_eth.dirty, 'is-valid': formETH.controls.value_eth.valid }" (change)="convertEthToReais()" />
+										<div class="input-group-prepend">
+											<span class="input-group-text">ETH</span>
+										</div>
+									</div>
+									<div class="text-danger text-center text-bold" *ngIf="formETH.controls.value_eth.invalid && formETH.controls.value_eth.dirty">
+										<p *ngIf="formETH.controls.value_eth.errors.required">Valor obrigatório</p>
+										<p *ngIf="formETH.controls.value_eth.errors.gte">O valor precisa ser maior que zero</p>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text">R$</span>
+										</div>
+										<input type="number" id="value_reais" name="value_reais" class="form-control" placeholder="Valor em reais" min="0" formControlName="value_reais" [ngClass]="{ 'is-invalid': formETH.controls.value_reais.invalid && formETH.controls.value_reais.dirty }" (change)="convertReaisToEth()" />
+									</div>
+									<div class="text-danger text-center text-bold" *ngIf="formETH.controls.value_reais.invalid && formETH.controls.value_reais.dirty">
+										<p *ngIf="formETH.controls.value_reais.errors.gte">O valor precisa ser maior que zero</p>
+									</div>
+								</div>
+								<div class="form-group">
+									<button type="submit" class="btn btn-primary btn-block" [disabled]="formETH.invalid">Enviar</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row" *ngIf="globals.user.hasAdmin">
+				<div class="col-md-12 mb-4">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="card-title">Administrador</h4>
+							<p class="text-center">Você é administrador da RDGcoin</p>
+							<div class="btns d-flex justify-content-center text-center">
+								<div>
+									<b>Adicionar endereços na lista de permissão para SWAP</b>
+									<ul class="list-group mt-2">
+										<li *ngFor="let item of addresses; index as i" class="list-group-item d-flex justify-content-between align-items-center">
+											{{item}} <span class="btn btn-danger btn-small mx-1" (click)="addresses.splice(i)"><i class="fa fa-trash mx-2 text-white"></i></span>
+										</li>
+									</ul>
+									<form [formGroup]="formWhitelist">
+										<div class="form-group">
+											<div class="input-group">
+												<input #addressAddWhitelist id="address" name="address" placeholder="Endereço" class="form-control" type="address" formControlName="address" [ngClass]="{ 'is-invalid': formWhitelist.controls.address.invalid && formWhitelist.controls.address.dirty, 'is-valid': formWhitelist.controls.address.valid }" />
+												<div class="input-group-btn">
+													<button class="btn btn-outline-primary" [disabled]="formWhitelist.invalid" (click)="addresses.push(addressAddWhitelist.value)">Adicionar</button>
+												</div>
+											</div>
+											<div class="text-danger text-center text-bold" *ngIf="formWhitelist.controls.address.invalid && formWhitelist.controls.address.dirty">
+												<p *ngIf="formWhitelist.controls.address.errors.required">Endereço obrigatório</p>
+												<p *ngIf="formWhitelist.controls.address.errors.rangeLength">O endereço precisa ter 42 caracteres</p>
+											</div>
+										</div>
+										<div class="form-group">
+											<button class="btn btn-primary btn-block" [disabled]="addresses.length <= 0" (click)="sendWhitelist()">Enviar</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row" *ngIf="globals.user.balanceRDG > 0">
+				<div class="col-md-12 mb-4">
+					<div class="card">
+						<div class="card-body text-center">
+
+							<h4 class="card-title">Chegou a nova moeda RDGCoin!</h4>
+							<p>Notamos que você possui saldo de <b>{{globals.user.balanceRDG}}</b> da moeda antiga RDG.</p>
+
+							<h5 class="card-title mb-2 mt-4">Porquê devo atualizar minhas moedas?</h5>
+							<p>Para saber mais informações sobre as novas características da moeda RDGCoin, <a href="https://www.rdgcoin.com/atualizar-moeda" target="_blank">clique aqui</a> para ter acesso ao vídeo explicativo, e ao relatório técnico das mudanças e melhorias do novo token.</p>
+							
+							<h5 class="card-title mb-2 mt-4">Como faço para atualizar minha moeda?</h5>
+							<h6 class="mb-2 mt-4">Passo 1: Verificar se estou na lista de aprovação</h6>
+							<p>Esse processo é chamado de "Whitelist", e é como uma lista de espera para as pessoas que desejam atualizar suas moedas para a nova RDGCoin.</p>
+
+							<div *ngIf="globals.user.whitelisted">
+								<h6 class="mb-2 mt-4">Passo 2: Aprovar o saldo para atualização</h6>
+								<p>O processo de atualização da moeda é muito simples, basta clicar no botão abaixo, que iremos aprovar a transferência dos seus tokens RDG para RDGCoin na Blockchain da Ethereum. Não se preocupe, todo o seu saldo em RDG será convertido em RDGCoin, sem nenhuma perda!</p>
+								<a class="btn btn-outline-secondary m-2" (click)="approve()">Aprovar atualização da minha moeda</a>
+
+								<h6 class="mb-2 mt-4">Passo 3: Realizar a troca</h6>
+								<p>Atenção, esse processo é irreversível. Após a troca ser efetivada, não será possível mais comprar ou enviar tokens RDG.<br/>
+									Isso não será um problema, pois a partir da troca, você podera enviar e receber os novos tokens RDGCoin.</p>
+								<a class="btn btn-outline-secondary m-2" (click)="swap()">Trocar RDG por RDGCoin</a>
+							</div>
+
+							<div *ngIf="!globals.user.whitelisted">
+								<p>Para poder atualizar o seu token, precisamos avaliar a solicitação de atualização de token caso a caso. Para fazer parte desta lista, clique no botão abaixo e preencha este formulário com seus dados.</p>
+								<a class="btn btn-outline-secondary m-2" href="#" target="_blank">Quero me cadastrar na Whitelist</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<footer class="footer-area">
+		<div class="container">
+			<div class="row">
+				<div class="copyright-area col-md-6">
+					<p>© <b>Top Midia LTDA 2020</b> - Todos os direitos reservados.</p>
+				</div>
+				<div class="footer-menu col-md-6">
+					<ul>
+						<li><a href="https://www.rdgcoin.com/" target="_blank">Sobre</a></li>
+						<li><a href="mailto:contato@rdgcoin.com">Contato</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</footer>
+</div>
+
+<ng-template #ComprarRDG let-modal>
+	<div class="modal-header bg-primary">
+		<h4 class="modal-title">Comprar RDGCoin</h4>
+		<button type="button" class="close" (click)="modal.close('')"> <span >×</span></button>
+	</div>
+	<div class="modal-body">
+		<div class="btns d-flex justify-content-center">
+			<div class="card p-2 m-2 text-center">
+				<b>Em breve</b>
+			</div>
+		</div>
+	</div>
+</ng-template>
+>>>>>>> 3354005d36dbecdda6fe7e25f787fd00d6d64a6b

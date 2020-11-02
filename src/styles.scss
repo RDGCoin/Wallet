@@ -3,7 +3,11 @@ $indigo: #6610f2;
 $purple: #4A3080;
 $pink: #BB507F;
 $red: #dc3545;
+<<<<<<< HEAD
 $orange: #BCAA38;
+=======
+$orange: #f39c12;
+>>>>>>> 3354005d36dbecdda6fe7e25f787fd00d6d64a6b
 $yellow: #ddb85f;
 $green: #79AC33;
 $teal: #9ACA57;
@@ -23,9 +27,15 @@ $black:    #000;
 
 $primary: $yellow;
 $secondary: #101a2d;
+<<<<<<< HEAD
 $success: $blue;
 $info: $cyan;
 $warning: $purple;
+=======
+$success: $green;
+$info: $cyan;
+$warning: $orange;
+>>>>>>> 3354005d36dbecdda6fe7e25f787fd00d6d64a6b
 $danger: $red;
 $light: $gray-100;
 $dark: $gray-800;
@@ -35,7 +45,94 @@ $dark: $gray-800;
 @import '~bootstrap/scss/bootstrap';
 @import '~ngx-toastr/toastr-bs4-alert';
 
+<<<<<<< HEAD
 html, body {
   background-color: #101a2d;
   height: 100%;
+=======
+:root {
+  font-size: 16px
+}
+
+html,
+body {
+  height: 100%;
+  line-height: 24px;
+  color: #2f2f2f;
+  background: #f5f4ff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: 0 !important
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: hind vadodara, sans-serif;
+  font-weight: 700
+}
+
+iframe {
+  border: none
+}
+
+a,
+b,
+div,
+ul,
+li {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
+  -moz-outline-: none
+}
+
+input,
+input:hover,
+input:focus,
+input:active,
+textarea,
+textarea:hover,
+textarea:focus,
+textarea:active,
+select:focus,
+select:hover {
+  -moz-outline: none;
+  outline: none;
+  box-shadow: none
+}
+
+img:not([draggable]),
+embed,
+object,
+video {
+  max-width: 100%;
+  height: auto
+}
+
+a {
+  text-decoration: none;
+  outline: 0
+}
+
+a:active,
+a:focus,
+a:hover,
+a:visited {
+  text-decoration: none;
+  outline: 0
+}
+
+img {
+  border: none;
+  max-width: 100%
+}
+
+button:focus {
+  -moz-outline: none;
+  outline: none;
+  box-shadow: none
+>>>>>>> 3354005d36dbecdda6fe7e25f787fd00d6d64a6b
 }
