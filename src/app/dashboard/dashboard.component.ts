@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { GlobalsService } from '../globals.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -15,9 +16,10 @@ import { WalletService } from '../services/wallet.service';
 })
 export class DashboardComponent implements OnInit {
 	private exchangeRateApi = 'https://api.exchangeratesapi.io/latest';
-	private coinMarketCapApi = 'https://pro-api.coinmarketcap.com';
+	private coinMarketCapApi = 'https://sistemas.agenciabike.com.br/coinmarketcap.php';
 	public RDGCOIN: { buy: number; sell: number };
-	public ETH: number = 0;
+	public ETH_USD: number = 0;
+	public ETH_BRL: number = 0;
 	public USD_BRL: number = 0;
 	formRDG: FormGroup;
 	formETH: FormGroup;
@@ -30,18 +32,19 @@ export class DashboardComponent implements OnInit {
 		private toastrService: ToastrService,
 		private modalService: NgbModal,
 		private http: HttpClient,
+		private router: Router,
 		private fb: FormBuilder
 	) {
 		this.RDGCOIN = { buy: 0, sell: 0 };
 		this.addresses = [];
 		this.formRDG = this.fb.group({
 			address: ['', [Validators.required, CustomValidators.rangeLength([42, 42])]],
-			value_rdg: ['', [Validators.required, CustomValidators.gte(0)]],
+			value_rdg: ['', [Validators.required, CustomValidators.gte(0.001)]],
 			value_reais: ['', [CustomValidators.gte(0)]],
 		});
 		this.formETH = this.fb.group({
 			address: ['', [Validators.required, CustomValidators.rangeLength([42, 42])]],
-			value_eth: ['', [Validators.required, CustomValidators.gte(0)]],
+			value_eth: ['', [Validators.required, CustomValidators.gte(0.001)]],
 			value_reais: ['', [CustomValidators.gte(0)]],
 		});
 		this.formWhitelist = this.fb.group({
@@ -52,6 +55,11 @@ export class DashboardComponent implements OnInit {
 	smallAddress: string;
 
 	ngOnInit(): void {
+
+		if(!this.globals.userWallet) {
+			this.router.navigateByUrl('/');
+		}
+
 		this.smallAddress = this.globals.userWallet.address.substr(0, 6) + '...' + this.globals.userWallet.address.substr(38);
 
 		// Exchange Rates API
@@ -66,18 +74,15 @@ export class DashboardComponent implements OnInit {
 			});
 
 		// CoinMarketCap API
-		this.http.get(`${this.coinMarketCapApi}/v1/cryptocurrency/quotes/latest?symbol=ETH`, {
+		this.http.get(`${this.coinMarketCapApi}`, {
 				observe: 'response',
-				headers: {
-					'X-CMC_PRO_API_KEY': '1107c837-515b-4721-9cf1-049124a29a7c',
-					'Access-Control-Allow-Origin': '*'
-				}
 			})
 			.toPromise()
 			.then((response) => {
 				console.log(response);
 				if (response.ok && response.status === 200) {
-					this.ETH = Number(response.body['data']['ETH']['quote']['USD']['price']) * this.USD_BRL;
+					this.ETH_USD = Number(response.body['data']['ETH']['quote']['USD']['price']);
+					this.ETH_BRL = this.ETH_USD * this.USD_BRL;
 				}
 			});
 	}
@@ -116,13 +121,13 @@ export class DashboardComponent implements OnInit {
 
 	convertReaisToEth() {
 		const valorReais = parseFloat(this.formETH.controls.value_reais.value);
-		const valorEth = valorReais / this.ETH;
+		const valorEth = valorReais / this.ETH_BRL;
 		this.formETH.controls.value_eth.setValue(valorEth);
 	}
 
 	convertEthToReais() {
 		const valorEth = parseFloat(this.formETH.controls.value_eth.value);
-		const valorReais = (valorEth * this.ETH).toFixed(2);
+		const valorReais = (valorEth * this.ETH_BRL).toFixed(2);
 		this.formETH.controls.value_reais.setValue(valorReais);
 	}
 
@@ -130,12 +135,22 @@ export class DashboardComponent implements OnInit {
 		const address = this.formETH.controls.address.value;
 		const value = this.formETH.controls.value_eth.value;
 		this.walletService.transferETH(address, value);
+
+		// Limpa o form
+		this.formETH.controls.address.setValue('');
+		this.formETH.controls.value_eth.setValue('');
+		this.formETH.controls.value_reais.setValue('');
 	}
 
 	async sendRDGCoin() {
 		const address = this.formRDG.controls.address.value;
 		const value = this.formRDG.controls.value_rdg.value;
 		this.walletService.transfer(address, value);
+
+		// Limpa o form
+		this.formRDG.controls.address.setValue('');
+		this.formRDG.controls.value_rdg.setValue('');
+		this.formRDG.controls.value_reais.setValue('');
   }
 
   async sendWhitelist() {

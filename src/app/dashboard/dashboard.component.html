@@ -13,7 +13,8 @@
 						<div class="single-balance available-balance">
 							<h4 class="balance-title">Cotação Atual</h4>
 							<h6 class="balance"><span>RDG</span> {{RDGCOIN.buy | currency:'R$ '}}</h6>
-							<h6 class="balance"><span>ETH</span> {{ETH | currency:'R$ '}}</h6>
+							<h6 class="balance"><span>ETH</span> {{ETH_BRL | currency:'R$ '}}</h6>
+							<h6 class="balance"><span>USD</span> {{USD_BRL | currency:'R$ '}}</h6>
 							<div class="balance-icon">
 								<span class="icon-money"></span>
 							</div>
@@ -22,6 +23,7 @@
 							<h4 class="balance-title">Saldo RDGCoin</h4>
 							<h6 class="balance">{{globals.user.balance}} <span>RDG</span></h6>
 							<h6 class="balance">{{globals.user.balance * RDGCOIN.buy | currency:'R$ '}}</h6>
+							<h6 class="balance">{{globals.user.balance * (RDGCOIN.buy / USD_BRL) | currency:'USD '}}</h6>
 							<div class="balance-icon">
 								<span class="icon-wallet"></span>
 							</div>
@@ -29,7 +31,8 @@
 						<div class="single-balance pending-balance">
 							<h4 class="balance-title">Saldo Ethereum</h4>
 							<h6 class="balance">{{globals.user.eth}} <span>ETH</span> <span *ngIf="globals.user.lowGas"><i class="fa fa-warning mx-2 text-danger"></i></span></h6>
-							<h6 class="balance">{{globals.user.eth * ETH | currency:'R$ '}}</h6>
+							<h6 class="balance">{{globals.user.eth * ETH_BRL | currency:'R$ '}}</h6>
+							<h6 class="balance">{{globals.user.eth * ETH_USD | currency:'USD '}}</h6>
 							<div class="balance-icon">
 								<span class="icon-wallet"></span>
 							</div>
@@ -78,7 +81,7 @@
 									</div>
 									<div class="text-danger text-center text-bold" *ngIf="formRDG.controls.value_rdg.invalid && formRDG.controls.value_rdg.dirty">
 										<p *ngIf="formRDG.controls.value_rdg.errors.required">Valor obrigatório</p>
-										<p *ngIf="formRDG.controls.value_rdg.errors.gte">O valor precisa ser maior que zero</p>
+										<p *ngIf="formRDG.controls.value_rdg.errors.gte">O valor precisa ser maior que "0.001"</p>
 									</div>
 								</div>
 								<div class="form-group">
@@ -120,7 +123,7 @@
 									</div>
 									<div class="text-danger text-center text-bold" *ngIf="formETH.controls.value_eth.invalid && formETH.controls.value_eth.dirty">
 										<p *ngIf="formETH.controls.value_eth.errors.required">Valor obrigatório</p>
-										<p *ngIf="formETH.controls.value_eth.errors.gte">O valor precisa ser maior que zero</p>
+										<p *ngIf="formETH.controls.value_eth.errors.gte">O valor precisa ser maior que "0.001"</p>
 									</div>
 								</div>
 								<div class="form-group">
@@ -209,7 +212,7 @@
 
 							<div *ngIf="!globals.user.whitelisted">
 								<p>Para poder atualizar o seu token, precisamos avaliar a solicitação de atualização de token caso a caso. Para fazer parte desta lista, clique no botão abaixo e preencha este formulário com seus dados.</p>
-								<a class="btn btn-outline-secondary m-2" href="#" target="_blank">Quero me cadastrar na Whitelist</a>
+								<a class="btn btn-outline-secondary m-2" href="https://docs.google.com/forms/d/e/1FAIpQLSdR61PuntON0YF8kpqOL90tulFXanLqmOzD5DZpx7HMb8H5hg/viewform" target="_blank">Quero me cadastrar na Whitelist</a>
 							</div>
 						</div>
 					</div>
@@ -222,12 +225,13 @@
 		<div class="container">
 			<div class="row">
 				<div class="copyright-area col-md-6">
-					<p>© <b>Top Midia LTDA 2020</b> - Todos os direitos reservados.</p>
+					<p>© <b>Top Midia Tecnologia 2020</b> - Todos os direitos reservados.</p>
 				</div>
 				<div class="footer-menu col-md-6">
 					<ul>
 						<li><a href="https://www.rdgcoin.com/" target="_blank">Sobre</a></li>
 						<li><a href="mailto:contato@rdgcoin.com">Contato</a></li>
+						<li><a href="#" routerLink="/">Sair</a></li>
 					</ul>
 				</div>
 			</div>
