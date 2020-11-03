@@ -1,7 +1,4 @@
 export const environment = {
-<<<<<<< HEAD
-  production: true
-=======
   production: true,
   network: 'homestead',
   scryptDiff: 14,
@@ -13,5 +10,4 @@ export const environment = {
   RDGCoinSell: 3.7,
   baseCurrencyCode: 'USD',
   otherCurrencyCodes: ['BRL'],
->>>>>>> 3354005d36dbecdda6fe7e25f787fd00d6d64a6b
 };

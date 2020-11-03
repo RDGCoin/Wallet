@@ -14,15 +14,6 @@ import { WalletService } from '../services/wallet.service';
 	styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-<<<<<<< HEAD
-	form: FormGroup;
-	private baseUrl = 'https://api.exchangeratesapi.io/latest';
-	public RDGCOIN: { buy: string; sell: string };
-
-	constructor(
-    public globals: GlobalsService,
-    private walletService: WalletService,
-=======
 	private exchangeRateApi = 'https://api.exchangeratesapi.io/latest';
 	private coinMarketCapApi = 'https://pro-api.coinmarketcap.com';
 	public RDGCOIN: { buy: number; sell: number };
@@ -36,18 +27,11 @@ export class DashboardComponent implements OnInit {
 	constructor(
 		public globals: GlobalsService,
 		private walletService: WalletService,
->>>>>>> 3354005d36dbecdda6fe7e25f787fd00d6d64a6b
 		private toastrService: ToastrService,
 		private modalService: NgbModal,
 		private http: HttpClient,
 		private fb: FormBuilder
 	) {
-<<<<<<< HEAD
-		this.RDGCOIN = { buy: '', sell: '' };
-		this.form = this.fb.group({
-			address: ['', [Validators.required, CustomValidators.rangeLength([42, 42])]],
-			value: ['', [Validators.required, CustomValidators.gte(0)]],
-=======
 		this.RDGCOIN = { buy: 0, sell: 0 };
 		this.addresses = [];
 		this.formRDG = this.fb.group({
@@ -62,7 +46,6 @@ export class DashboardComponent implements OnInit {
 		});
 		this.formWhitelist = this.fb.group({
 		  address: ['', [Validators.required, CustomValidators.rangeLength([42, 42])]]
->>>>>>> 3354005d36dbecdda6fe7e25f787fd00d6d64a6b
 		});
 	}
 
@@ -70,17 +53,6 @@ export class DashboardComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.smallAddress = this.globals.userWallet.address.substr(0, 6) + '...' + this.globals.userWallet.address.substr(38);
-<<<<<<< HEAD
-		const url = `${this.baseUrl}?base=${environment.baseCurrencyCode}&symbols=${environment.otherCurrencyCodes.join(',')}`;
-		this.http
-			.get(url, { observe: 'response' })
-			.toPromise()
-			.then((response) => {
-				if (response.ok && response.status === 200) {
-					const quote = Number(response.body['rates'][environment.otherCurrencyCodes[0]]);
-					this.RDGCOIN.buy = 'R$ ' + (this.globals.prices.RDGCOIN.buy * quote).toFixed(2);
-					this.RDGCOIN.sell = 'R$ ' + (this.globals.prices.RDGCOIN.sell * quote).toFixed(2);
-=======
 
 		// Exchange Rates API
 		this.http.get(`${this.exchangeRateApi}?base=${environment.baseCurrencyCode}&symbols=${environment.otherCurrencyCodes.join(',')}`, { observe: 'response' })
@@ -106,7 +78,6 @@ export class DashboardComponent implements OnInit {
 				console.log(response);
 				if (response.ok && response.status === 200) {
 					this.ETH = Number(response.body['data']['ETH']['quote']['USD']['price']) * this.USD_BRL;
->>>>>>> 3354005d36dbecdda6fe7e25f787fd00d6d64a6b
 				}
 			});
 	}
@@ -131,19 +102,6 @@ export class DashboardComponent implements OnInit {
 		this.toastrService.success('Successo', 'Endereço copiado!');
 	}
 
-<<<<<<< HEAD
-	async sendEther() {
-		const address = this.form.controls.address.value;
-    const value = this.form.controls.value.value;
-    this.walletService.transferETH(address, value);
-	}
-
-	async sendRDGCoin() {
-		const address = this.form.controls.address.value;
-    const value = this.form.controls.value.value;
-    this.walletService.transfer(address, value);
-	}
-=======
 	convertReaisToRdg() {
 		const valorReais = parseFloat(this.formRDG.controls.value_reais.value);
 		const valorRdg = valorReais / this.RDGCOIN.buy;
@@ -191,5 +149,4 @@ export class DashboardComponent implements OnInit {
   swap() {
     this.walletService.swapRDG();
   }
->>>>>>> 3354005d36dbecdda6fe7e25f787fd00d6d64a6b
 }
