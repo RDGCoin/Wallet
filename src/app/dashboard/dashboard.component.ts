@@ -39,12 +39,12 @@ export class DashboardComponent implements OnInit {
 		this.addresses = [];
 		this.formRDG = this.fb.group({
 			address: ['', [Validators.required, CustomValidators.rangeLength([42, 42])]],
-			value_rdg: ['', [Validators.required, CustomValidators.gte(0.001)]],
+			value_rdg: ['', [Validators.required, CustomValidators.gte(0)]],
 			value_reais: ['', [CustomValidators.gte(0)]],
 		});
 		this.formETH = this.fb.group({
 			address: ['', [Validators.required, CustomValidators.rangeLength([42, 42])]],
-			value_eth: ['', [Validators.required, CustomValidators.gte(0.001)]],
+			value_eth: ['', [Validators.required, CustomValidators.gte(0)]],
 			value_reais: ['', [CustomValidators.gte(0)]],
 		});
 		this.formWhitelist = this.fb.group({

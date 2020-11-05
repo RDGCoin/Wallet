@@ -134,7 +134,7 @@
         -ms-transition: all .5s;
         transition: all .5s;
 
-        &:hover {
+        &:hover:not(:disabled) {
           border: 1px solid #101a2d;
           background: 0 0;
           color: #101a2d

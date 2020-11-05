@@ -81,7 +81,7 @@
 									</div>
 									<div class="text-danger text-center text-bold" *ngIf="formRDG.controls.value_rdg.invalid && formRDG.controls.value_rdg.dirty">
 										<p *ngIf="formRDG.controls.value_rdg.errors.required">Valor obrigatório</p>
-										<p *ngIf="formRDG.controls.value_rdg.errors.gte">O valor precisa ser maior que "0.001"</p>
+										<p *ngIf="formRDG.controls.value_rdg.errors.gte">O valor precisa ser maior que zero</p>
 									</div>
 								</div>
 								<div class="form-group">
@@ -96,7 +96,10 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<button type="submit" class="btn btn-primary btn-block" [disabled]="formRDG.invalid">Enviar</button>
+									<button type="submit" class="btn btn-primary btn-block" [disabled]="formRDG.invalid || globals.user.lowGas">Enviar</button>
+								</div>
+								<div class="text-danger text-center text-bold" *ngIf="globals.user.lowGas">
+									<p><i class="fa fa-warning mx-2"></i> Saldo ETH insuficiente!</p>
 								</div>
 							</form>
 						</div>
@@ -123,7 +126,7 @@
 									</div>
 									<div class="text-danger text-center text-bold" *ngIf="formETH.controls.value_eth.invalid && formETH.controls.value_eth.dirty">
 										<p *ngIf="formETH.controls.value_eth.errors.required">Valor obrigatório</p>
-										<p *ngIf="formETH.controls.value_eth.errors.gte">O valor precisa ser maior que "0.001"</p>
+										<p *ngIf="formETH.controls.value_eth.errors.gte">O valor precisa ser maior que zero</p>
 									</div>
 								</div>
 								<div class="form-group">
@@ -138,7 +141,10 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<button type="submit" class="btn btn-primary btn-block" [disabled]="formETH.invalid">Enviar</button>
+									<button type="submit" class="btn btn-primary btn-block" [disabled]="formETH.invalid || globals.user.lowGas">Enviar</button>
+								</div>
+								<div class="text-danger text-center text-bold" *ngIf="globals.user.lowGas">
+									<p><i class="fa fa-warning mx-2"></i> Saldo ETH insuficiente!</p>
 								</div>
 							</form>
 						</div>
@@ -205,9 +211,14 @@
 								<a class="btn btn-outline-secondary m-2" (click)="approve()">Aprovar atualização da minha moeda</a>
 
 								<h6 class="mb-2 mt-4">Passo 3: Realizar a troca</h6>
-								<p>Atenção, esse processo é irreversível. Após a troca ser efetivada, não será possível mais comprar ou enviar tokens RDG.<br/>
-									Isso não será um problema, pois a partir da troca, você podera enviar e receber os novos tokens RDGCoin.</p>
-								<a class="btn btn-outline-secondary m-2" (click)="swap()">Trocar RDG por RDGCoin</a>
+								<p>
+									Atenção, esse processo é irreversível. Após a troca ser efetivada, não será possível mais comprar ou enviar tokens RDG.<br/>
+									Isso não será um problema, pois a partir da troca, você podera enviar e receber os novos tokens RDGCoin.
+								</p>
+								<p class="text-danger text-bold" *ngIf="globals.user.lowGas">
+									<i class="fa fa-warning mx-2"></i> Saldo ETH insuficiente para solicitar o SWAP do token!
+								</p>
+								<a class="btn btn-outline-secondary m-2" *ngIf="!globals.user.lowGas" (click)="swap()">Trocar RDG por RDGCoin</a>
 							</div>
 
 							<div *ngIf="!globals.user.whitelisted">
