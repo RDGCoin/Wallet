@@ -151,11 +151,15 @@
 
 .footer-area {
   position: absolute;
-  height: 100px;
   width: 100%;
   bottom: 0;
   background:  #101a2d;
   padding: 46px 0;
+
+  .container {
+    z-index: 9999;
+    position: relative;
+  }
 
   .copyright-area p {
     margin-bottom: 0;
