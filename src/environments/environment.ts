@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   network: 'ropsten',
+  etherscanUrl: 'https://ropsten.etherscan.io/',
   scryptDiff: 14,
   AddressRDG: '0x85A5C96b93dAF494F8dCa56c41D4594560b2882b',
   AddressRDGCoin: '0x4f6C0Fc5a4D753A26D8023D52DA298f0A806A9bF',

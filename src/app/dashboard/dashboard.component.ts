@@ -91,6 +91,11 @@ export class DashboardComponent implements OnInit {
 		this.modalService.open(content, { ariaLabelledBy: 'qrcodeModal', centered: true });
 	}
 
+	openEtherscan() {
+		let url = environment.etherscanUrl + 'address/' + this.globals.userWallet.address;
+		window.open(url, '_blank');
+	}
+
 	copyToClipboard() {
 		const selBox = document.createElement('textarea');
 		selBox.style.position = 'fixed';

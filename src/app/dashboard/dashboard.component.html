@@ -54,7 +54,8 @@
 								<!--<p class="colortext psize">{{globals.userWallet.address}}</p>-->
 								<p class="colortext psize">{{smallAddress}}</p>
 
-								<button class="btn btn-outline-dark" (click)="copyToClipboard()"><i class="fa fa-copy"></i> Copiar endereço</button>
+								<button class="btn btn-outline-dark btn-sm" (click)="copyToClipboard()"><i class="fa fa-copy"></i> Copiar endereço</button>
+								<button class="btn btn-outline-danger btn-sm ml-2" (click)="openEtherscan()"><i class="fa fa-external-link"></i> Transações</button>
 								<!--<button class="btn btn-outline-primary m-2" (click)="open(ComprarRDG)">Comprar RDG</button>-->
 							</div>
 						</div>
@@ -180,7 +181,7 @@
 											</div>
 										</div>
 										<div class="form-group">
-											<button class="btn btn-primary btn-block" [disabled]="addresses.length <= 0" (click)="sendWhitelist()">Enviar</button>
+											<button class="btn btn-primary btn-block" [disabled]="formWhitelist.invalid || addresses.length <= 0" (click)="sendWhitelist()">Enviar</button>
 										</div>
 									</form>
 								</div>
@@ -208,7 +209,7 @@
 							<div *ngIf="globals.user.whitelisted">
 								<h6 class="mb-2 mt-4">Passo 2: Aprovar o saldo para atualização</h6>
 								<p>O processo de atualização da moeda é muito simples, basta clicar no botão abaixo, que iremos aprovar a transferência dos seus tokens RDG para RDGCoin na Blockchain da Ethereum. Não se preocupe, todo o seu saldo em RDG será convertido em RDGCoin, sem nenhuma perda!</p>
-								<a class="btn btn-outline-secondary m-2" (click)="approve()">Aprovar atualização da minha moeda</a>
+								<a class="btn btn-primary btn-lg m-2" (click)="approve()">Clique aqui para aprovar o SWAP</a>
 
 								<h6 class="mb-2 mt-4">Passo 3: Realizar a troca</h6>
 								<p>
@@ -218,12 +219,12 @@
 								<p class="text-danger text-bold" *ngIf="globals.user.lowGas">
 									<i class="fa fa-warning mx-2"></i> Saldo ETH insuficiente para solicitar o SWAP do token!
 								</p>
-								<a class="btn btn-outline-secondary m-2" *ngIf="!globals.user.lowGas" (click)="swap()">Trocar RDG por RDGCoin</a>
+								<a class="btn btn-primary btn-lg m-2" *ngIf="!globals.user.lowGas" (click)="swap()">Clique aqui para realizar o SWAP</a>
 							</div>
 
 							<div *ngIf="!globals.user.whitelisted">
 								<p>Para poder atualizar o seu token, precisamos avaliar a solicitação de atualização de token caso a caso. Para fazer parte desta lista, clique no botão abaixo e preencha este formulário com seus dados.</p>
-								<a class="btn btn-outline-secondary m-2" href="https://docs.google.com/forms/d/e/1FAIpQLSdR61PuntON0YF8kpqOL90tulFXanLqmOzD5DZpx7HMb8H5hg/viewform" target="_blank">Quero me cadastrar na Whitelist</a>
+								<a class="btn btn-primary btn-lg m-2" href="https://docs.google.com/forms/d/e/1FAIpQLSdR61PuntON0YF8kpqOL90tulFXanLqmOzD5DZpx7HMb8H5hg/viewform" target="_blank">Clique aqui para se cadastrar na Whitelist</a>
 							</div>
 						</div>
 					</div>

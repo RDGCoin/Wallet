@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   network: 'homestead',
+  etherscanUrl: 'https://etherscan.io/',
   scryptDiff: 14,
   AddressRDG: '0x47740A5ac376f6e95464A1FAfFB0D980944Cf4Bf',
   AddressRDGCoin: '0x3987dC5E72CD99e12cC98eddD65ed345473aFfD3',
