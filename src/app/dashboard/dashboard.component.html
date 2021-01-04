@@ -12,7 +12,7 @@
 					<div class="balance-area">
 						<div class="single-balance available-balance">
 							<h4 class="balance-title">Cotação Atual</h4>
-							<h6 class="balance"><span>RDG</span> {{RDGCOIN.buy | currency:'R$ '}}</h6>
+							<h6 class="balance"><span>RDG</span> {{RDGCOIN.sell | currency:'R$ '}}</h6>
 							<h6 class="balance"><span>ETH</span> {{ETH_BRL | currency:'R$ '}}</h6>
 							<h6 class="balance"><span>USD</span> {{USD_BRL | currency:'R$ '}}</h6>
 							<div class="balance-icon">
@@ -22,8 +22,8 @@
 						<div class="single-balance pending-balance">
 							<h4 class="balance-title">Saldo RDGCoin</h4>
 							<h6 class="balance">{{globals.user.balance}} <span>RDG</span></h6>
-							<h6 class="balance">{{globals.user.balance * RDGCOIN.buy | currency:'R$ '}}</h6>
-							<h6 class="balance">{{globals.user.balance * (RDGCOIN.buy / USD_BRL) | currency:'USD '}}</h6>
+							<h6 class="balance">{{globals.user.balance * RDGCOIN.sell | currency:'R$ '}}</h6>
+							<h6 class="balance">{{globals.user.balance * (RDGCOIN.sell / USD_BRL) | currency:'USD '}}</h6>
 							<div class="balance-icon">
 								<span class="icon-wallet"></span>
 							</div>
