@@ -114,13 +114,13 @@ export class DashboardComponent implements OnInit {
 
 	convertReaisToRdg() {
 		const valorReais = parseFloat(this.formRDG.controls.value_reais.value);
-		const valorRdg = valorReais / this.RDGCOIN.buy;
+		const valorRdg = valorReais / this.RDGCOIN.sell;
 		this.formRDG.controls.value_rdg.setValue(valorRdg);
 	}
 
 	convertRdgToReais() {
 		const valorRdg = parseFloat(this.formRDG.controls.value_rdg.value);
-		const valorReais = (valorRdg * this.RDGCOIN.buy).toFixed(2);
+		const valorReais = (valorRdg * this.RDGCOIN.sell).toFixed(2);
 		this.formRDG.controls.value_reais.setValue(valorReais);
 	}
 
