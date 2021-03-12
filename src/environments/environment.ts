@@ -11,8 +11,8 @@ export const environment = {
   AddressRDGCoin: '0x4f6C0Fc5a4D753A26D8023D52DA298f0A806A9bF',
   AddressSwap: '0x11B197f994d2E9fF5250031635aEd39ADc3117FA',
   minimumGas: 0.001,
-  RDGCoinBuy: 3.95,
-  RDGCoinSell: 4.45,
+  RDGCoinBuy: 5,
+  RDGCoinSell: 5,
   baseCurrencyCode: 'USD',
   otherCurrencyCodes: ['BRL'],
 };
