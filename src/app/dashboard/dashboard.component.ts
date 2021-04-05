@@ -15,7 +15,7 @@ import { WalletService } from '../services/wallet.service';
 	styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-	private exchangeRateApi = 'https://api.exchangeratesapi.io/latest?access_key=7bbc8faee1652cf42b91582cae71be8f';
+	private exchangeRateApi = 'http://api.exchangeratesapi.io/latest?access_key=7bbc8faee1652cf42b91582cae71be8f';
 	private coinMarketCapApi = 'https://sistemas.agenciabike.com.br/coinmarketcap.php';
 	public RDGCOIN: { buy: number; sell: number };
 	public ETH_USD: number = 0;
