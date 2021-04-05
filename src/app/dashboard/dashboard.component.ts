@@ -15,7 +15,7 @@ import { WalletService } from '../services/wallet.service';
 	styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-	private exchangeRateApi = 'https://api.exchangeratesapi.io/latest';
+	private exchangeRateApi = 'https://api.exchangeratesapi.io/latest?access_key=7bbc8faee1652cf42b91582cae71be8f';
 	private coinMarketCapApi = 'https://sistemas.agenciabike.com.br/coinmarketcap.php';
 	public RDGCOIN: { buy: number; sell: number };
 	public ETH_USD: number = 0;
@@ -63,7 +63,7 @@ export class DashboardComponent implements OnInit {
 		this.smallAddress = this.globals.userWallet.address.substr(0, 6) + '...' + this.globals.userWallet.address.substr(38);
 
 		// Exchange Rates API
-		this.http.get(`${this.exchangeRateApi}?base=${environment.baseCurrencyCode}&symbols=${environment.otherCurrencyCodes.join(',')}`, { observe: 'response' })
+		this.http.get(`${this.exchangeRateApi}&base=${environment.baseCurrencyCode}&symbols=${environment.otherCurrencyCodes.join(',')}`, { observe: 'response' })
 			.toPromise()
 			.then((response) => {
 				if (response.ok && response.status === 200) {
