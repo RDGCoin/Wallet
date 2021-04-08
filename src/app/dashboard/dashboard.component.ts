@@ -15,7 +15,7 @@ import { WalletService } from '../services/wallet.service';
 	styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-	private exchangeRateApi = 'http://api.exchangeratesapi.io/latest?access_key=7bbc8faee1652cf42b91582cae71be8f';
+	//private exchangeRateApi = 'http://api.exchangeratesapi.io/latest?access_key=7bbc8faee1652cf42b91582cae71be8f';
 	private coinMarketCapApi = 'https://sistemas.agenciabike.com.br/coinmarketcap.php';
 	public RDGCOIN: { buy: number; sell: number };
 	public ETH_USD: number = 0;
@@ -54,7 +54,7 @@ export class DashboardComponent implements OnInit {
 
 	smallAddress: string;
 
-	ngOnInit(): void {
+	async ngOnInit() {
 
 		if(!this.globals.userWallet) {
 			this.router.navigateByUrl('/');
@@ -62,6 +62,7 @@ export class DashboardComponent implements OnInit {
 
 		this.smallAddress = this.globals.userWallet.address.substr(0, 6) + '...' + this.globals.userWallet.address.substr(38);
 
+		/*
 		// Exchange Rates API
 		this.http.get(`${this.exchangeRateApi}&base=${environment.baseCurrencyCode}&symbols=${environment.otherCurrencyCodes.join(',')}`, { observe: 'response' })
 			.toPromise()
@@ -72,19 +73,32 @@ export class DashboardComponent implements OnInit {
 					this.RDGCOIN.sell = this.globals.prices.RDGCOIN.sell * this.USD_BRL;
 				}
 			});
+			*/
 
-		// CoinMarketCap API
-		this.http.get(`${this.coinMarketCapApi}`, {
-				observe: 'response',
-			})
-			.toPromise()
-			.then((response) => {
-				console.log(response);
-				if (response.ok && response.status === 200) {
-					this.ETH_USD = Number(response.body['data']['ETH']['quote']['USD']['price']);
-					this.ETH_BRL = this.ETH_USD * this.USD_BRL;
-				}
-			});
+		// CoinMarketCap API - USD price
+		let coinMarketCapUSD: any = await this.http.get(`${this.coinMarketCapApi}?convert=USD`, {observe:'response'}).toPromise();
+		/*.then((response) => {
+			console.log(response);
+			if (response.ok && response.status === 200) {
+			}
+		});*/
+
+		// CoinMarketCap API - BRL price
+		let coinMarketCapBRL: any = await this.http.get(`${this.coinMarketCapApi}?convert=BRL`, {observe:'response'}).toPromise();
+		/*.then((response) => {
+			console.log(response);
+			if (response.ok && response.status === 200) {
+			}
+		});*/
+
+		// Se as duas forem consultadas
+		if(coinMarketCapUSD.status === 200 && coinMarketCapBRL.status === 200) {
+			this.ETH_USD = Number(coinMarketCapUSD.body['data']['ETH']['quote']['USD']['price']);
+			this.ETH_BRL = Number(coinMarketCapBRL.body['data']['ETH']['quote']['BRL']['price']);
+			this.USD_BRL = this.ETH_BRL / this.ETH_BRL;
+			this.RDGCOIN.buy = this.globals.prices.RDGCOIN.buy * this.USD_BRL;
+			this.RDGCOIN.sell = this.globals.prices.RDGCOIN.sell * this.USD_BRL;
+		}
 	}
 
 	open(content: any) {
