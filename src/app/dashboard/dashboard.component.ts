@@ -95,7 +95,7 @@ export class DashboardComponent implements OnInit {
 		if(coinMarketCapUSD.status === 200 && coinMarketCapBRL.status === 200) {
 			this.ETH_USD = Number(coinMarketCapUSD.body['data']['ETH']['quote']['USD']['price']);
 			this.ETH_BRL = Number(coinMarketCapBRL.body['data']['ETH']['quote']['BRL']['price']);
-			this.USD_BRL = this.ETH_BRL / this.ETH_BRL;
+			this.USD_BRL = this.ETH_BRL / this.ETH_USD;
 			this.RDGCOIN.buy = this.globals.prices.RDGCOIN.buy * this.USD_BRL;
 			this.RDGCOIN.sell = this.globals.prices.RDGCOIN.sell * this.USD_BRL;
 		}
